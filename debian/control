@@ -1,0 +1,29 @@
+Source: liburjtag
+Section: misc
+Priority: optional
+Maintainer: Ilia Platone <info@iliaplatone.com>
+Build-Depends: debhelper (>= 8.1.3~),
+ cdbs,
+ automake,
+ autopoint,
+ libtool,
+ pkg-config,
+ autotools-dev,
+ libusb-dev,
+ libusb-1.0-0-dev,
+ libftdi-dev,
+ python3-dev
+Standards-Version: 3.9.5
+Homepage: http://urjtag.org/
+Vcs-Git: https://git.code.sf.net/p/urjtag/git urjtag-git
+
+Package: liburjtag
+Section: libs
+Architecture: any
+Multi-Arch: same
+Depends: ${shlibs:Depends}, ${misc:Depends},
+Pre-Depends: ${misc:Pre-Depends}
+Description: JTAG programmer for various flash parts and boards
+    A command line tool for communicating over JTAG (IEEE 1149.1) with various flash chips, CPUs, boards and JTAG adapters.
+    It has an open and modular architecture with the ability to write miscellaneous extensions (like board testers, or flash memory programmers).
+    This is a (more actively maintained) fork of the 'openwince-jtag' software. 

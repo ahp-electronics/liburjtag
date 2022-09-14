@@ -1,0 +1,66 @@
+
+Notes on doing a release
+
+
+- Have ChangeLog kept updated during development
+- Also NEWS, THANKS, README and the doc/UrJTAG.txt
+- Plus ../web/htdocs/index.html  section 'Status'
+So far the continues effort
+
+The actual release
+- Have or create awareness there is an upcoming release
+- Version number is formatted as  YYYY.MM
+  or as YYYY.MMpreN
+- Update the version in configure.ac
+- Put the same version number in NEWS
+-  ./autogen.sh
+-  make dist-xz # updates  .po files
+-  git add po/*.po
+-  git commit -m 'po/*.po timestamps due `./autogen.sh`'
+-  git status
+- Various `git add` on where needed
+- Another `git commit`
+-  git tag
+-  git push
+-  git push --tags
+-  make dist-xz
+- Some checksumming and signing
+  ( there is tools/checksumming )
+- Upload the  .tar.xz and checksums to SoureForce
+  See https://sourceforge.net/p/forge/documentation/Files/ how
+- update, build and commit web content, clue: ../web/Makefile
+
+
+> If there are already some notes on doing a release,
+> then please tell the mailinglist(archive) about it.
+
+Hi,
+
+work to do that already kept me from "simply releasing" a few times
+because it takes a bit of time and diligence:
+
+
+etc..
+
+ - (TBD) build binaries for download, especially for windows..
+
+Do NOT make any last-minute functional/build/code changes. Just touch
+documentation for the release.
+
+The only overall change that I find worth considering at this moment
+is maybe to separate all the handcrafted or compiled chip data
+(urjtag/data content) from the actual UrJTAG code. Especially with the
+"new" ability to read BSDL directly, the data/ lost its importance
+somewhat. This question might be discussed especially by the
+maintainers of urjtag packages for distribution?
+
+Nb the "urjtag.com" and "urjtag.de" domain registration only lives
+until  the end of this year, but I'll continue to support
+"urjtag.org". If the project is not moved somewhere else where there
+is no webserver for the www. A record, as it is now configured with
+sourceforge.. well, anyway, that is certainly not life-critical for
+the project.
+
+
+Regards,
+Kolja
