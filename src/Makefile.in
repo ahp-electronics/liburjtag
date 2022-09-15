@@ -194,8 +194,8 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 liburjtag_la_DEPENDENCIES = tap/libtap.la part/libpart.la \
-	lib/libjtaglib.la flash/libflash.la bfin/libbfin.la \
-	bus/libbus.la cmd/libcmd.la pld/libpld.la global/libglobal.la \
+	lib/libjtaglib.la flash/libflash.la bus/libbus.la \
+	cmd/libcmd.la pld/libpld.la global/libglobal.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) $(am__append_5) \
 	$(am__append_6) $(am__append_7) $(am__append_8)
 am_liburjtag_la_OBJECTS =
@@ -281,7 +281,7 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 ETAGS = etags
 CTAGS = ctags
-DIST_SUBDIRS = flash lib tap part bfin bus cmd pld global svf bsdl jim \
+DIST_SUBDIRS = flash lib tap part bus cmd pld global svf bsdl jim \
 	stapl
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/urjtag.pc.in \
 	$(top_srcdir)/Makefile.rules
@@ -462,7 +462,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 LINT_FLAGS = -warnposixheaders +boolint
-SUBDIRS = flash lib tap part bfin bus cmd pld global $(am__append_1) \
+SUBDIRS = flash lib tap part bus cmd pld global $(am__append_1) \
 	$(am__append_2) $(am__append_3) $(am__append_4)
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = urjtag.pc
@@ -470,10 +470,10 @@ lib_LTLIBRARIES = liburjtag.la
 liburjtag_la_LDFLAGS = -version-info 0:0:0 -no-undefined
 liburjtag_la_SOURCES = 
 liburjtag_la_LIBADD = tap/libtap.la part/libpart.la lib/libjtaglib.la \
-	flash/libflash.la bfin/libbfin.la bus/libbus.la cmd/libcmd.la \
-	pld/libpld.la global/libglobal.la -lm $(LIBFTDI_LIBS) \
-	@FTD2XXLIB@ $(LIBUSB_LIBS) @LIBINTL@ $(am__append_5) \
-	$(am__append_6) $(am__append_7) $(am__append_8)
+	flash/libflash.la bus/libbus.la cmd/libcmd.la pld/libpld.la \
+	global/libglobal.la -lm $(LIBFTDI_LIBS) @FTD2XXLIB@ \
+	$(LIBUSB_LIBS) @LIBINTL@ $(am__append_5) $(am__append_6) \
+	$(am__append_7) $(am__append_8)
 AM_CPPFLAGS = -DLOCALEDIR=\"$(localedir)\"
 AM_CFLAGS = $(WARNINGCFLAGS)
 all: all-recursive

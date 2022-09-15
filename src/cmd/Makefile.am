@@ -64,7 +64,6 @@ always_enabled_cmd_files = \
 	cmd_addpart.c \
 	cmd_cmd.c \
 	cmd_usleep.c \
-	cmd_bfin.c \
 	cmd_pld.c
 
 libcmd_la_SOURCES = \

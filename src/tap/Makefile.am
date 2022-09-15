@@ -114,11 +114,6 @@ libtap_la_SOURCES += \
 	cable/wiggler2.c
 endif
 
-if ENABLE_CABLE_JLINK
-libtap_la_SOURCES += \
-	cable/jlink.c
-endif
-
 if ENABLE_CABLE_XPC
 libtap_la_SOURCES += \
 	cable/xpc.c

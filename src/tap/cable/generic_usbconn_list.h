@@ -40,9 +40,6 @@
 _URJ_USB(xpc_int)
 _URJ_USB(xpc_ext)
 #endif
-#ifdef ENABLE_CABLE_JLINK
-_URJ_USB(jlink)
-#endif
 #ifdef ENABLE_CABLE_FT2232
 _URJ_USB_FTDX(ft2232)
 _URJ_USB_FTDX(armusbocd)

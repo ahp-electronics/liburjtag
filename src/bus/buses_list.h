@@ -42,22 +42,6 @@ _URJ_BUS(avr32)
 #ifdef ENABLE_BUS_BCM1250
 _URJ_BUS(bcm1250)
 #endif
-#ifdef ENABLE_BUS_BLACKFIN
-_URJ_BUS(bf518f_ezbrd)
-_URJ_BUS(bf51x)
-_URJ_BUS(bf526_ezkit)
-_URJ_BUS(bf527_ezkit)
-_URJ_BUS(bf527_sdp)
-_URJ_BUS(bf52x)
-_URJ_BUS(bf533_ezkit)
-_URJ_BUS(bf533_stamp)
-_URJ_BUS(bf537_ezkit)
-_URJ_BUS(bf537_stamp)
-_URJ_BUS(bf538f_ezkit)
-_URJ_BUS(bf53x)
-_URJ_BUS(bf548_ezkit)
-_URJ_BUS(bf561_ezkit)
-#endif
 #ifdef ENABLE_BUS_BSCOACH
 _URJ_BUS(bscoach)
 #endif

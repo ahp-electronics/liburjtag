@@ -83,9 +83,6 @@ _URJ_CABLE(igloo)
 #ifdef ENABLE_JIM
 _URJ_CABLE(jim)
 #endif
-#ifdef ENABLE_CABLE_JLINK
-_URJ_CABLE(jlink)
-#endif
 #ifdef ENABLE_CABLE_KEITHKOEP
 _URJ_CABLE(keithkoep)
 #endif

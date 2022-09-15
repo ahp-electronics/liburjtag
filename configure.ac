@@ -87,7 +87,6 @@ AC_CONFIG_FILES(
 	src/jim/Makefile
 	src/pld/Makefile
 	src/global/Makefile
-	src/bfin/Makefile
 )
 
 AM_MAINTAINER_MODE

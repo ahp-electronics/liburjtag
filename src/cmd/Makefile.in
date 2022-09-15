@@ -168,8 +168,8 @@ am__libcmd_la_SOURCES_DIST = cmd.h cmd_list.h generated_cmd_list.h \
 	cmd_debug.c cmd_shell.c cmd_set.c cmd_endian.c cmd_peekpoke.c \
 	cmd_pod.c cmd_readmem.c cmd_writemem.c cmd_flashmem.c \
 	cmd_eraseflash.c cmd_lockflash.c cmd_include.c cmd_addpart.c \
-	cmd_cmd.c cmd_usleep.c cmd_bfin.c cmd_pld.c cmd_svf.c \
-	cmd_bsdl.c cmd_stapl.c
+	cmd_cmd.c cmd_usleep.c cmd_pld.c cmd_svf.c cmd_bsdl.c \
+	cmd_stapl.c
 am__objects_1 = cmd_frequency.lo cmd_cable.lo cmd_reset.lo \
 	cmd_discovery.lo cmd_idcode.lo cmd_detect.lo \
 	cmd_detectflash.lo cmd_help.lo cmd_quit.lo cmd_scan.lo \
@@ -180,7 +180,7 @@ am__objects_1 = cmd_frequency.lo cmd_cable.lo cmd_reset.lo \
 	cmd_peekpoke.lo cmd_pod.lo cmd_readmem.lo cmd_writemem.lo \
 	cmd_flashmem.lo cmd_eraseflash.lo cmd_lockflash.lo \
 	cmd_include.lo cmd_addpart.lo cmd_cmd.lo cmd_usleep.lo \
-	cmd_bfin.lo cmd_pld.lo
+	cmd_pld.lo
 @ENABLE_SVF_TRUE@am__objects_2 = cmd_svf.lo
 @ENABLE_BSDL_TRUE@am__objects_3 = cmd_bsdl.lo
 @ENABLE_STAPL_TRUE@am__objects_4 = cmd_stapl.lo
@@ -207,27 +207,27 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir) -I$(top_builddir)/include/urj
 depcomp = $(SHELL) $(top_srcdir)/tools/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/cmd_addpart.Plo \
-	./$(DEPDIR)/cmd_bfin.Plo ./$(DEPDIR)/cmd_bit.Plo \
-	./$(DEPDIR)/cmd_bsdl.Plo ./$(DEPDIR)/cmd_bus.Plo \
-	./$(DEPDIR)/cmd_cable.Plo ./$(DEPDIR)/cmd_cmd.Plo \
-	./$(DEPDIR)/cmd_debug.Plo ./$(DEPDIR)/cmd_detect.Plo \
-	./$(DEPDIR)/cmd_detectflash.Plo ./$(DEPDIR)/cmd_discovery.Plo \
-	./$(DEPDIR)/cmd_dr.Plo ./$(DEPDIR)/cmd_endian.Plo \
-	./$(DEPDIR)/cmd_eraseflash.Plo ./$(DEPDIR)/cmd_flashmem.Plo \
-	./$(DEPDIR)/cmd_frequency.Plo ./$(DEPDIR)/cmd_get.Plo \
-	./$(DEPDIR)/cmd_help.Plo ./$(DEPDIR)/cmd_idcode.Plo \
-	./$(DEPDIR)/cmd_include.Plo ./$(DEPDIR)/cmd_initbus.Plo \
-	./$(DEPDIR)/cmd_instruction.Plo ./$(DEPDIR)/cmd_lockflash.Plo \
-	./$(DEPDIR)/cmd_part.Plo ./$(DEPDIR)/cmd_peekpoke.Plo \
-	./$(DEPDIR)/cmd_pld.Plo ./$(DEPDIR)/cmd_pod.Plo \
-	./$(DEPDIR)/cmd_print.Plo ./$(DEPDIR)/cmd_quit.Plo \
-	./$(DEPDIR)/cmd_readmem.Plo ./$(DEPDIR)/cmd_register.Plo \
-	./$(DEPDIR)/cmd_reset.Plo ./$(DEPDIR)/cmd_salias.Plo \
-	./$(DEPDIR)/cmd_scan.Plo ./$(DEPDIR)/cmd_set.Plo \
-	./$(DEPDIR)/cmd_shell.Plo ./$(DEPDIR)/cmd_shift.Plo \
-	./$(DEPDIR)/cmd_signal.Plo ./$(DEPDIR)/cmd_stapl.Plo \
-	./$(DEPDIR)/cmd_svf.Plo ./$(DEPDIR)/cmd_test.Plo \
-	./$(DEPDIR)/cmd_usleep.Plo ./$(DEPDIR)/cmd_writemem.Plo
+	./$(DEPDIR)/cmd_bit.Plo ./$(DEPDIR)/cmd_bsdl.Plo \
+	./$(DEPDIR)/cmd_bus.Plo ./$(DEPDIR)/cmd_cable.Plo \
+	./$(DEPDIR)/cmd_cmd.Plo ./$(DEPDIR)/cmd_debug.Plo \
+	./$(DEPDIR)/cmd_detect.Plo ./$(DEPDIR)/cmd_detectflash.Plo \
+	./$(DEPDIR)/cmd_discovery.Plo ./$(DEPDIR)/cmd_dr.Plo \
+	./$(DEPDIR)/cmd_endian.Plo ./$(DEPDIR)/cmd_eraseflash.Plo \
+	./$(DEPDIR)/cmd_flashmem.Plo ./$(DEPDIR)/cmd_frequency.Plo \
+	./$(DEPDIR)/cmd_get.Plo ./$(DEPDIR)/cmd_help.Plo \
+	./$(DEPDIR)/cmd_idcode.Plo ./$(DEPDIR)/cmd_include.Plo \
+	./$(DEPDIR)/cmd_initbus.Plo ./$(DEPDIR)/cmd_instruction.Plo \
+	./$(DEPDIR)/cmd_lockflash.Plo ./$(DEPDIR)/cmd_part.Plo \
+	./$(DEPDIR)/cmd_peekpoke.Plo ./$(DEPDIR)/cmd_pld.Plo \
+	./$(DEPDIR)/cmd_pod.Plo ./$(DEPDIR)/cmd_print.Plo \
+	./$(DEPDIR)/cmd_quit.Plo ./$(DEPDIR)/cmd_readmem.Plo \
+	./$(DEPDIR)/cmd_register.Plo ./$(DEPDIR)/cmd_reset.Plo \
+	./$(DEPDIR)/cmd_salias.Plo ./$(DEPDIR)/cmd_scan.Plo \
+	./$(DEPDIR)/cmd_set.Plo ./$(DEPDIR)/cmd_shell.Plo \
+	./$(DEPDIR)/cmd_shift.Plo ./$(DEPDIR)/cmd_signal.Plo \
+	./$(DEPDIR)/cmd_stapl.Plo ./$(DEPDIR)/cmd_svf.Plo \
+	./$(DEPDIR)/cmd_test.Plo ./$(DEPDIR)/cmd_usleep.Plo \
+	./$(DEPDIR)/cmd_writemem.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -467,7 +467,6 @@ always_enabled_cmd_files = \
 	cmd_addpart.c \
 	cmd_cmd.c \
 	cmd_usleep.c \
-	cmd_bfin.c \
 	cmd_pld.c
 
 libcmd_la_SOURCES = cmd.h cmd_list.h generated_cmd_list.h \
@@ -544,7 +543,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd_addpart.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd_bfin.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd_bit.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd_bsdl.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cmd_bus.Plo@am__quote@ # am--include-marker
@@ -753,7 +751,6 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/cmd_addpart.Plo
-	-rm -f ./$(DEPDIR)/cmd_bfin.Plo
 	-rm -f ./$(DEPDIR)/cmd_bit.Plo
 	-rm -f ./$(DEPDIR)/cmd_bsdl.Plo
 	-rm -f ./$(DEPDIR)/cmd_bus.Plo
@@ -841,7 +838,6 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/cmd_addpart.Plo
-	-rm -f ./$(DEPDIR)/cmd_bfin.Plo
 	-rm -f ./$(DEPDIR)/cmd_bit.Plo
 	-rm -f ./$(DEPDIR)/cmd_bsdl.Plo
 	-rm -f ./$(DEPDIR)/cmd_bus.Plo

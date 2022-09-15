@@ -40,7 +40,6 @@ libjtaglib_la_SOURCES = \
 	hex.c \
 	getdelim.c \
 	getline.c \
-	usleep.c \
 	$(libiberty_sources)
 
 AM_CFLAGS = $(WARNINGCFLAGS)

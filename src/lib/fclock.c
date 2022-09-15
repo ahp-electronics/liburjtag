@@ -79,14 +79,18 @@ urj_lib_frealtime (void)
 {
     long double result;
 
-    struct timespec t;
-    if (clock_gettime (CLOCK_REALTIME, &t) == -1)
-    {
-        perror ("urj_lib_frealtime (clock_gettime)");
-        exit (EXIT_FAILURE);
-    }
-    result =
-        (long double) t.tv_sec + (long double) t.tv_nsec * (long double) 1e-9;
+#ifndef MACOS
+    struct timespec now;
+    clock_gettime(CLOCK_REALTIME, &now);
+    result = (long double) now.tv_sec + now.tv_nsec * (long double) 1e-9;
+#else
+    struct timezone tz;
+    tz.tz_minuteswest = 0;
+    tz.tz_dsttime = 0;
+    struct timeval now;
+    gettimeofday(&now, &tz);
+    result = (long double) now.tv_sec + now.tv_usec * (long double) 1e-6;
+#endif
 
     assert (isnormal (result));
     assert (result > 0);

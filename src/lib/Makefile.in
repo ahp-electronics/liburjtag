@@ -157,12 +157,11 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libjtaglib_la_LIBADD =
 am__libjtaglib_la_SOURCES_DIST = fclock.c hex.c getdelim.c getline.c \
-	usleep.c lbasename.c lrealpath.c make-relative-prefix.c \
-	safe-ctype.c
+	lbasename.c lrealpath.c make-relative-prefix.c safe-ctype.c
 @JTAG_RELOCATABLE_TRUE@am__objects_1 = lbasename.lo lrealpath.lo \
 @JTAG_RELOCATABLE_TRUE@	make-relative-prefix.lo safe-ctype.lo
 am_libjtaglib_la_OBJECTS = fclock.lo hex.lo getdelim.lo getline.lo \
-	usleep.lo $(am__objects_1)
+	$(am__objects_1)
 libjtaglib_la_OBJECTS = $(am_libjtaglib_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -187,7 +186,7 @@ am__depfiles_remade = ./$(DEPDIR)/fclock.Plo ./$(DEPDIR)/getdelim.Plo \
 	./$(DEPDIR)/getline.Plo ./$(DEPDIR)/hex.Plo \
 	./$(DEPDIR)/lbasename.Plo ./$(DEPDIR)/lrealpath.Plo \
 	./$(DEPDIR)/make-relative-prefix.Plo \
-	./$(DEPDIR)/safe-ctype.Plo ./$(DEPDIR)/usleep.Plo
+	./$(DEPDIR)/safe-ctype.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -400,7 +399,6 @@ libjtaglib_la_SOURCES = \
 	hex.c \
 	getdelim.c \
 	getline.c \
-	usleep.c \
 	$(libiberty_sources)
 
 AM_CFLAGS = $(WARNINGCFLAGS)
@@ -467,7 +465,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/lrealpath.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/make-relative-prefix.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/safe-ctype.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/usleep.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -638,7 +635,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/lrealpath.Plo
 	-rm -f ./$(DEPDIR)/make-relative-prefix.Plo
 	-rm -f ./$(DEPDIR)/safe-ctype.Plo
-	-rm -f ./$(DEPDIR)/usleep.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -692,7 +688,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/lrealpath.Plo
 	-rm -f ./$(DEPDIR)/make-relative-prefix.Plo
 	-rm -f ./$(DEPDIR)/safe-ctype.Plo
-	-rm -f ./$(DEPDIR)/usleep.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

@@ -27,6 +27,7 @@
 #include "config.h"
 #endif
 
+#include <unistd.h>
 #include <urjtag/gettext.h>
 #define	_(s)		gettext(s)
 #define	N_(s)		gettext_noop(s)
@@ -67,14 +68,6 @@
 
 #ifndef HAVE_USLEEP
 int usleep (long unsigned usec);
-#endif
-
-#ifndef HAVE_NANOSLEEP
-#include <unistd.h>
-#ifndef HAVE_STRUCT_TIMESPEC
-struct timespec { unsigned long tv_sec, tv_nsec; };
-#endif
-#define nanosleep(req, rem) usleep((req)->tv_sec * 1000 * 1000 + (req)->tv_nsec / 1000)
 #endif
 
 #ifndef HAVE_GETLINE

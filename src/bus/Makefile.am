@@ -55,17 +55,6 @@ if ENABLE_BUS_BCM1250
 libbus_la_SOURCES += bcm1250.c
 endif
 
-if ENABLE_BUS_BLACKFIN
-libbus_la_SOURCES += \
-	blackfin.c \
-	blackfin.h \
-	bf518f_ezbrd.c \
-	bf533_stamp.c \
-	bf537_stamp.c \
-	bf548_ezkit.c \
-	bf561_ezkit.c
-endif
-
 if ENABLE_BUS_BSCOACH
 libbus_la_SOURCES += bscoach.c
 endif
