@@ -99,11 +99,7 @@ usbblaster_connect (urj_cable_t *cable, const urj_param_t *params[])
 static void
 usbblaster_set_frequency (urj_cable_t *cable, uint32_t new_frequency)
 {
-    if (new_frequency != FIXED_FREQUENCY)
-        urj_warning (_("USB-Blaster frequency is fixed to %ld Hz\n"),
-                    FIXED_FREQUENCY);
-
-    cable->frequency = FIXED_FREQUENCY;
+    cable->frequency = new_frequency;
 }
 
 static int
