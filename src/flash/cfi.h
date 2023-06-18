@@ -48,7 +48,7 @@
 #ifndef __ASSEMBLY__
 #include <stdint.h>
 
-#include <urjtag/types.h>
+#include <urjtag/urj_types.h>
 #include <urjtag/flash.h>
 #endif
 

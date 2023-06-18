@@ -132,8 +132,8 @@ urj_part_signal_define_pin (urj_chain_t *chain, const char *signal_name,
         }
     }
 
-    s->next = part->signals;
-    part->signals = s;
+    s->next = part->ssignals;
+    part->ssignals = s;
 
     return s;
 }

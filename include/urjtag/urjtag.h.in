@@ -26,11 +26,20 @@
 #ifndef URJ_URJTAG_H
 #define URJ_URJTAG_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+#ifdef _WIN32
+#define DLL_EXPORT __declspec(dllexport)
+#else
+#define DLL_EXPORT extern
+#endif
+
 #undef ENABLE_BSDL
 #undef ENABLE_SVF
 #undef HAVE_LIBUSB
 
-#include "types.h"
+#include "urj_types.h"
 #include "bitmask.h"
 #include "bsbit.h"
 #if ENABLE_BSDL
@@ -61,6 +70,12 @@
 #include "tap_state.h"
 #if HAVE_LIBUSB
 #include "usbconn.h"
+#endif
+
+DLL_EXPORT int32_t program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency);
+
+#ifdef __cplusplus
+} // extern "C"
 #endif
 
 #endif /* URJ_URJTAG_H */

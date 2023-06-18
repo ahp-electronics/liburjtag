@@ -25,7 +25,7 @@
 #ifndef URJ_BSDL_BSDL_H
 #define URJ_BSDL_BSDL_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #include "bsdl_mode.h"
 

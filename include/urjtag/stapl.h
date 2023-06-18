@@ -25,7 +25,7 @@
 #ifndef URJ_STAPL_H
 #define URJ_STAPL_H
 
-#include "types.h"
+#include "urj_types.h"
 
 int urj_stapl_run (urj_chain_t *chain, char *STAPL_file_name,
                    char *STAPL_action);

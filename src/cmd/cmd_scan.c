@@ -97,7 +97,7 @@ cmd_scan_run (urj_chain_t *chain, char *params[])
     urj_tap_chain_shift_data_registers (chain, 1);
 
     urj_part_signal_t *s;
-    for (s = part->signals; s; s = s->next)
+    for (s = part->ssignals; s; s = s->next)
     {
         if (s->input != NULL)
         {

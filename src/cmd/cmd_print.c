@@ -91,7 +91,7 @@ cmd_print_run (urj_chain_t *chain, char *params[])
             urj_part_t *part;
             urj_part_signal_t *s;
             part = chain->parts->parts[chain->active_part];
-            for (s = part->signals; s != NULL; s = s->next)
+            for (s = part->ssignals; s != NULL; s = s->next)
             {
                 urj_part_salias_t *sa;
                 if (s->pin)

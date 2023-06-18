@@ -25,7 +25,7 @@
 #ifndef URJ_JTAG_H
 #define URJ_JTAG_H
 
-#include "types.h"
+#include "urj_types.h"
 
 typedef enum URJ_ENDIAN {
     URJ_ENDIAN_LITTLE,

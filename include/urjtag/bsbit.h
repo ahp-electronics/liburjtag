@@ -25,7 +25,7 @@
 #ifndef URJ_BSBIT_BSBIT_H
 #define URJ_BSBIT_BSBIT_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #define URJ_BSBIT_INPUT         1
 #define URJ_BSBIT_OUTPUT        2

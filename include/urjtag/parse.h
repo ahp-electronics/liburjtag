@@ -27,7 +27,7 @@
 
 #include <stdio.h>
 
-#include "types.h"
+#include "urj_types.h"
 
 /**
  * Turn a string into a bunch of tokens (space delimited).  Returns the

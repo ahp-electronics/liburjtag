@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "types.h"
+#include "urj_types.h"
 
 typedef struct URJ_FLASH_CFI_ARRAY urj_flash_cfi_array_t;
 

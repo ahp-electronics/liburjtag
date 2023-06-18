@@ -25,7 +25,7 @@
 #ifndef URJ_DATA_REGISTER_H
 #define URJ_DATA_REGISTER_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #define URJ_DATA_REGISTER_MAXLEN        32
 

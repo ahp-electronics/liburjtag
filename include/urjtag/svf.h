@@ -28,7 +28,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "types.h"
+#include "urj_types.h"
 
 /**
  * ***************************************************************************

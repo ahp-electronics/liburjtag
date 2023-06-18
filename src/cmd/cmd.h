@@ -39,7 +39,7 @@
 #include <sysdep.h>
 
 #include <urjtag/params.h>
-#include <urjtag/types.h>
+#include <urjtag/urj_types.h>
 
 typedef struct
 {

@@ -25,7 +25,7 @@
 
 #include <stdarg.h>
 
-#include "types.h"
+#include "urj_types.h"
 
 /**
  * Log state.

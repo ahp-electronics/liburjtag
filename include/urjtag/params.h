@@ -37,7 +37,7 @@
 
 #include <stddef.h>
 
-#include "types.h"
+#include "urj_types.h"
 
 /**
  * Supported parameter types

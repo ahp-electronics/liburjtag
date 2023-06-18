@@ -26,7 +26,7 @@
 #ifndef URJ_BSSIGNAL_H
 #define URJ_BSSIGNAL_H
 
-#include "types.h"
+#include "urj_types.h"
 
 struct URJ_PART_SIGNAL
 {

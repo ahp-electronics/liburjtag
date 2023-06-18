@@ -37,7 +37,7 @@
 
 #include <stdint.h>
 
-#include "types.h"
+#include "urj_types.h"
 #include "params.h"
 
 typedef struct

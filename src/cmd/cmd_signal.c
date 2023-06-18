@@ -113,7 +113,7 @@ cmd_signal_complete (urj_chain_t *chain, char ***matches, size_t *match_cnt,
     if (part == NULL)
         return;
 
-    s = part->signals;
+    s = part->ssignals;
     while (s)
     {
         urj_completion_mayben_add_match (matches, match_cnt, text, text_len,

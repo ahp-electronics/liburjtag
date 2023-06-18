@@ -25,7 +25,7 @@
 #ifndef URJ_PART_INSTRUCTION_H
 #define URJ_PART_INSTRUCTION_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #define URJ_INSTRUCTION_MAXLEN_INSTRUCTION      20
 

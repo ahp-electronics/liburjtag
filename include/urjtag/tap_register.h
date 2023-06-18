@@ -25,7 +25,7 @@
 #ifndef URJ_TAP_REGISTER_H
 #define URJ_TAP_REGISTER_H
 
-#include "types.h"
+#include "urj_types.h"
 #include <stdint.h>
 
 struct URJ_TAP_REGISTER

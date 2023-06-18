@@ -34,7 +34,7 @@
 #ifndef URJ_SRC_AMD_H
 #define URJ_SRC_AMD_H
 
-#include <urjtag/types.h>
+#include <urjtag/urj_types.h>
 #include <urjtag/flash.h>
 
 int urj_flash_amd_detect (urj_bus_t *bus, uint32_t adr,

@@ -35,6 +35,10 @@ Boston, MA 02110-1301, USA.  */
 #ifndef SAFE_CTYPE_H
 #define SAFE_CTYPE_H
 
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 #ifdef isalpha
  #error "safe-ctype.h and ctype.h may not be used simultaneously"
 #endif
@@ -115,5 +119,9 @@ extern const unsigned char  _sch_toupper[256];
 extern const unsigned char  _sch_tolower[256];
 #define TOUPPER(c) _sch_toupper[(c) & 0xff]
 #define TOLOWER(c) _sch_tolower[(c) & 0xff]
+
+#ifdef  __cplusplus
+}
+#endif
 
 #endif /* SAFE_CTYPE_H */

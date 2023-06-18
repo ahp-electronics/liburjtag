@@ -25,7 +25,7 @@
 #ifndef URJ_PART_H
 #define URJ_PART_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #define URJ_PART_MANUFACTURER_MAXLEN    25
 #define URJ_PART_PART_MAXLEN            20
@@ -45,7 +45,7 @@ struct URJ_PART
     char manufacturer_name[URJ_PART_MANUFACTURER_MAXLEN + 1];
     char part_name[URJ_PART_PART_MAXLEN + 1];
     char stepping[URJ_PART_STEPPING_MAXLEN + 1];
-    urj_part_signal_t *signals;
+    urj_part_signal_t *ssignals;
     urj_part_salias_t *saliases;
     int instruction_length;
     urj_part_instruction_t *instructions;

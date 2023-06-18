@@ -34,7 +34,7 @@
 #ifndef URJ_CMD_H
 #define URJ_CMD_H
 
-#include "types.h"
+#include "urj_types.h"
 
 /**
  * @return URJ_STATUS_OK on success; URJ_STATUS_FAIL on error. Consult

@@ -26,6 +26,11 @@ Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA. 
 #ifndef FILENAMES_H
 #define FILENAMES_H
 
+
+#ifdef  __cplusplus
+extern "C" {
+#endif
+
 #if defined(__MSDOS__) || defined(_WIN32) || defined(__OS2__) || defined (__CYGWIN__)
 
 #ifndef HAVE_DOS_BASED_FILE_SYSTEM
@@ -50,3 +55,7 @@ extern int filename_cmp (const char *s1, const char *s2);
 #define FILENAME_CMP(s1, s2)	filename_cmp(s1, s2)
 
 #endif /* FILENAMES_H */
+
+#ifdef  __cplusplus
+}
+#endif

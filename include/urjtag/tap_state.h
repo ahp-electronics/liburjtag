@@ -27,7 +27,7 @@
 
 #include "bitmask.h"
 
-#include "types.h"
+#include "urj_types.h"
 
 #define URJ_TAP_STATE_DR        URJ_BIT (0)
 #define URJ_TAP_STATE_IR        URJ_BIT (1)

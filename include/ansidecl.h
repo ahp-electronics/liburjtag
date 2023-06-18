@@ -1,3 +1,5 @@
+
+
 /* ANSI and traditional C compatability macros
    Copyright 1991, 1992, 1993, 1994, 1995, 1996, 1998, 1999, 2000, 2001
    Free Software Foundation, Inc.
@@ -113,6 +115,10 @@ Foundation, Inc., 51 Franklin Street - Fifth Floor, Boston, MA 02110-1301, USA. 
 
 #ifndef	_ANSIDECL_H
 #define _ANSIDECL_H	1
+
+#ifdef  __cplusplus
+extern "C" {
+#endif
 
 /* Every source file includes this file,
    so they will all get the switch for lint.  */
@@ -388,6 +394,10 @@ So instead we use the macro below and test it against specific values.  */
    gcc 2.8.  */
 #if GCC_VERSION < 2008
 #define __extension__
+#endif
+
+#ifdef  __cplusplus
+}
 #endif
 
 #endif	/* ansidecl.h	*/

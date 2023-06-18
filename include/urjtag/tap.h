@@ -25,7 +25,7 @@
 #ifndef URJ_TAP_H
 #define URJ_TAP_H
 
-#include "types.h"
+#include "urj_types.h"
 
 void urj_tap_reset (urj_chain_t *chain);
 void urj_tap_trst_reset (urj_chain_t *chain);

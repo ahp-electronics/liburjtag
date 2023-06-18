@@ -55,7 +55,7 @@ urj_part_alloc (const urj_tap_register_t *id)
     p->manufacturer_name[0] = '\0';
     p->part_name[0] = '\0';
     p->stepping[0] = '\0';
-    p->signals = NULL;
+    p->ssignals = NULL;
     p->saliases = NULL;
     p->instruction_length = 0;
     p->instructions = NULL;
@@ -83,10 +83,10 @@ urj_part_free (urj_part_t *p)
         free (p->alias);        /* djf */
 
     /* signals */
-    while (p->signals)
+    while (p->ssignals)
     {
-        urj_part_signal_t *s = p->signals;
-        p->signals = s->next;
+        urj_part_signal_t *s = p->ssignals;
+        p->ssignals = s->next;
         urj_part_signal_free (s);
     }
 
@@ -182,7 +182,7 @@ urj_part_find_signal (urj_part_t *p, const char *signalname)
         return NULL;
     }
 
-    s = p->signals;
+    s = p->ssignals;
     while (s)
     {
         if (strcasecmp (signalname, s->name) == 0)

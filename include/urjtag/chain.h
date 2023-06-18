@@ -25,7 +25,7 @@
 #ifndef URJ_CHAIN_H
 #define URJ_CHAIN_H
 
-#include "types.h"
+#include "urj_types.h"
 
 #include "pod.h"
 #include "bsdl.h"

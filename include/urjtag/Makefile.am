@@ -56,7 +56,7 @@ pkginclude_HEADERS = \
 	tap.h \
 	stapl.h \
 	svf.h \
-	types.h \
+	urj_types.h \
 	usbconn.h
 
 nodist_pkginclude_HEADERS = \

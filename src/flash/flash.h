@@ -39,7 +39,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include <urjtag/types.h>
+#include <urjtag/urj_types.h>
 #include <urjtag/log.h>
 
 typedef struct URJ_FLASH_CFI_CHIP urj_flash_cfi_chip_t;
