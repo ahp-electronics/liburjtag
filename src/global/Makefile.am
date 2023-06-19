@@ -29,7 +29,6 @@ libglobal_la_SOURCES = \
 	parse.c \
 	log-error.c \
 	data_dir.c \
-	program.c \
 	params.c
 
 AM_CPPFLAGS = -DJTAG_BIN_DIR=\"$(bindir)\" -DJTAG_DATA_DIR=\"$(pkgdatadir)\"

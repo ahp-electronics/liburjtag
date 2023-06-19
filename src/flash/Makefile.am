@@ -32,6 +32,7 @@ libflash_la_SOURCES = \
 	cfi.c \
 	cfi.h \
 	detectflash.c \
+	program.c \
 	flash.c \
 	flash.h \
 	intel.c \
