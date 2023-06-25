@@ -115,7 +115,7 @@ const urj_cmd_t urj_cmd_shell = {
     cmd_shell_complete,
 };
 
-int32_t program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency)
+int program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency)
 {
     int32_t ret = 1;
     if(fd < 0)
