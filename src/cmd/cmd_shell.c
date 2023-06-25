@@ -114,3 +114,30 @@ const urj_cmd_t urj_cmd_shell = {
     cmd_shell_run,
     cmd_shell_complete,
 };
+
+int32_t program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency)
+{
+    int32_t ret = 1;
+    if(fd < 0)
+        return ret;
+    urj_chain_t *chain;
+    const urj_cable_driver_t *driver;
+    chain = urj_tap_chain_alloc ();
+    if(bsdl_path != NULL)
+        urj_bsdl_set_path (chain, bsdl_path);
+    driver = urj_tap_cable_find (drivername);
+    urj_cable_t *cable = urj_tap_cable_usb_connect (chain, driver, NULL);
+    urj_tap_cable_set_frequency (cable, frequency);
+    int32_t err = urj_tap_detect(chain, 0);
+    if(err == URJ_STATUS_OK) {
+        FILE *svf = fdopen(fd, "r");
+        if(svf != NULL) {
+            err = urj_svf_run (chain, svf, 1, frequency);
+            if(err == URJ_STATUS_OK)
+                ret = 0;
+            fclose (svf);
+        }
+    }
+    urj_tap_chain_free(chain);
+    return ret;
+}
