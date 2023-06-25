@@ -82,8 +82,6 @@ int urj_cmd_params (char * const params[]);
  */
 int urj_cmd_get_number (const char *s, long unsigned *i);
 
-int program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency);
-
 
 
 #endif /* URJ_CMD_H */
