@@ -53,6 +53,4 @@
 int urj_svf_run (urj_chain_t *chain, FILE *SVF_FILE, int stop_on_mismatch,
                  uint32_t ref_freq);
 
-int program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency);
-
 #endif /* URJ_SVF_H */

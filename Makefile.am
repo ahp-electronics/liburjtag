@@ -44,6 +44,8 @@ EXTRA_DIST = \
 
 ACLOCAL_AMFLAGS = -I m4
 
+LDFLAGS=-version-info @version_info@
+
 swig:
 	swig \
 		-python \

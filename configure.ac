@@ -20,8 +20,17 @@
 # Written by Marcel Telka <marcel@telka.sk>, 2002, 2003,
 #  and other UrJTAG authors, 2007, 2008, ...
 #
+m4_define([v_maj], [0])
+m4_define([v_min], [12])
+m4_define([lt_cur], m4_eval(v_maj + v_min))
+m4_define([project_version], [v_maj.v_min])
 
-AC_INIT([UrJTAG], [2021.03], [http://urjtag.org], [urjtag])
+m4_define([lt_cur], [m4_eval(v_maj + v_min)])
+m4_define([lt_age], [v_min])
+version_info="lt_cur:lt_age"
+AC_SUBST([version_info])
+
+AC_INIT([UrJTAG], [project_version], [http://urjtag.org], [urjtag])
 
 dnl autoconf-2.64 was released in 2008
 AC_PREREQ(2.64)
