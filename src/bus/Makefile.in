@@ -484,6 +484,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+version_info = @version_info@
 LINT_FLAGS = -warnposixheaders +boolint
 noinst_LTLIBRARIES = libbus.la
 libbus_la_SOURCES = buses.c buses.h buses_list.h generic_bus.c \

@@ -426,6 +426,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+version_info = @version_info@
 LINT_FLAGS = -warnposixheaders +boolint
 noinst_LTLIBRARIES = libcmd.la
 always_enabled_cmd_files = \

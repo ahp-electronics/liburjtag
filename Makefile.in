@@ -218,9 +218,9 @@ am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/config.h.in \
 	$(top_srcdir)/tools/config.sub $(top_srcdir)/tools/install-sh \
 	$(top_srcdir)/tools/ltmain.sh $(top_srcdir)/tools/missing \
 	ABOUT-NLS AUTHORS COPYING ChangeLog INSTALL NEWS README THANKS \
-	tools/compile tools/config.guess tools/config.rpath \
-	tools/config.sub tools/install-sh tools/ltmain.sh \
-	tools/missing tools/ylwrap
+	config.rpath tools/compile tools/config.guess \
+	tools/config.rpath tools/config.sub tools/install-sh \
+	tools/ltmain.sh tools/missing tools/ylwrap
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 distdir = $(PACKAGE)-$(VERSION)
 top_distdir = $(distdir)
@@ -301,7 +301,7 @@ INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 INTLLIBS = @INTLLIBS@
 INTL_MACOSX_LIBS = @INTL_MACOSX_LIBS@
 LD = @LD@
-LDFLAGS = @LDFLAGS@
+LDFLAGS = -version-info @version_info@
 LEX = @LEX@
 LEXLIB = @LEXLIB@
 LEX_OUTPUT_ROOT = @LEX_OUTPUT_ROOT@
@@ -413,6 +413,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+version_info = @version_info@
 LINT_FLAGS = -warnposixheaders +boolint
 SUBDIRS = \
 	doc \
