@@ -30,22 +30,27 @@
 #include <urjtag.h>
 
 
-int32_t program_jtag(int32_t fd, const char *drivername, const char *bsdl_path, int64_t frequency, int32_t device_n)
+int32_t program_jtag(int32_t fd, const char *drivername, const char* params[], const char *bsdl_path, int64_t frequency, int32_t device_n)
 {
     int ret = 1, err = 0;
     urj_chain_t *chain;
     urj_part_t *part;
     const urj_cable_driver_t *driver;
+    const urj_param_t **cable_params;
     FILE *svf = fdopen(fd, "r");
     err = (svf == NULL);
     if(err) return ENOENT;
+    if (urj_param_init_list (&cable_params, (char**)params, &urj_cable_param_list) != URJ_STATUS_OK)
+        return EINVAL;
     chain = urj_tap_chain_alloc ();
+    if(bsdl_path != NULL)
+        urj_bsdl_set_path (chain, bsdl_path);
     chain->active_part = device_n;
     if(bsdl_path != NULL)
         urj_bsdl_set_path (chain, bsdl_path);
     driver = urj_tap_cable_find (drivername);
     int ntries = 5;
-    urj_cable_t *cable = urj_tap_cable_usb_connect (chain, driver, NULL);
+    urj_cable_t *cable = urj_tap_cable_usb_connect (chain, driver, cable_params);
     while(ntries-- > 0) {
         urj_tap_cable_set_frequency (cable, frequency);
         err = urj_tap_detect(chain, 0);

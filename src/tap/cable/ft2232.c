@@ -2589,7 +2589,7 @@ const urj_cable_driver_t urj_tap_cable_ft2232_driver = {
     ft2232_flush,
     ftdx_usbcable_help
 };
-URJ_DECLARE_FTDX_CABLE(0x0000, 0x0000, "-mpsse", "FT2232", ft2232)
+URJ_DECLARE_FTDX_CABLE(0x0403, 0x0604, "-mpsse", "FT2232", ft2232)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     "ARM-USB-OCD",
