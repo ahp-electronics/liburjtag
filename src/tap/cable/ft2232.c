@@ -2591,6 +2591,26 @@ const urj_cable_driver_t urj_tap_cable_ft2232_driver = {
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0x0604, "-mpsse", "FT2232", ft2232)
 
+const urj_cable_driver_t urj_tap_cable_ft232_driver = {
+    "FT232",
+    N_("Generic FTDI FT232 Cable"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_generic_init,
+    ft2232_generic_done,
+    ft2232_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ftdx_usbcable_help
+};
+URJ_DECLARE_FTDX_CABLE(0x0403, 0x6014, "-mpsse", "FT232", ft232)
+
 const urj_cable_driver_t urj_tap_cable_ft2232_armusbocd_driver = {
     "ARM-USB-OCD",
     N_("Olimex ARM-USB-OCD (FT2232) Cable"),

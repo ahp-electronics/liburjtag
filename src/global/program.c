@@ -40,8 +40,9 @@ int32_t program_jtag(int32_t fd, const char *drivername, const char* params[], c
     FILE *svf = fdopen(fd, "r");
     err = (svf == NULL);
     if(err) return ENOENT;
-    if (urj_param_init_list (&cable_params, (char**)params, &urj_cable_param_list) != URJ_STATUS_OK)
-        return EINVAL;
+    if(params != NULL)
+        if(urj_param_init_list (&cable_params, (char**)params, &urj_cable_param_list) != URJ_STATUS_OK)
+            return EINVAL;
     chain = urj_tap_chain_alloc ();
     if(bsdl_path != NULL)
         urj_bsdl_set_path (chain, bsdl_path);
