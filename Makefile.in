@@ -134,6 +134,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+@ENABLE_APPS_TRUE@am__append_1 = \
+@ENABLE_APPS_TRUE@	src/apps/jtag
+
+@ENABLE_APPS_TRUE@@ENABLE_BSDL_TRUE@am__append_2 = \
+@ENABLE_APPS_TRUE@@ENABLE_BSDL_TRUE@	src/apps/bsdl2jtag
+
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/gettext.m4 \
@@ -417,14 +423,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 version_info = @version_info@
 LINT_FLAGS = -warnposixheaders +boolint
-SUBDIRS = \
-	doc \
-	extra/fjmem \
-	include \
-	include/urjtag \
-	data \
-	src
-
+SUBDIRS = doc extra/fjmem include include/urjtag data src \
+	$(am__append_1) $(am__append_2)
 DIST_SUBDIRS = \
 	$(SUBDIRS)
 

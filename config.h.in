@@ -3,6 +3,9 @@
 /* define for dmalloc library */
 #undef DMALLOC
 
+/* define if you want to build the jtag and bsdl2jtag main programs */
+#undef ENABLE_APPS
+
 /* define if BSDL subsystem is enabled */
 #undef ENABLE_BSDL
 

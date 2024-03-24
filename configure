@@ -809,6 +809,8 @@ ENABLE_SVF_TRUE
 LEXLIB
 LEX_OUTPUT_ROOT
 LEX
+ENABLE_APPS_FALSE
+ENABLE_APPS_TRUE
 WARNINGCFLAGS
 HAVE_INPOUTXX_FALSE
 HAVE_INPOUTXX_TRUE
@@ -994,6 +996,7 @@ with_libftdi
 with_ftd2xx
 with_inpout32
 enable_werror
+enable_apps
 enable_svf
 enable_stapl
 enable_bsdl
@@ -1668,6 +1671,8 @@ Optional Features:
                           optimize for fast installation [default=yes]
   --disable-libtool-lock  avoid locking (might break parallel builds)
   --enable-werror         build with -Werror
+  --disable-apps          disable building the jtag and bsdl2jtag main
+                          programs
   --disable-svf           Disable SVF player
   --disable-stapl         Disable STAPL player
   --disable-bsdl          Disable BSDL subsystem
@@ -3633,7 +3638,7 @@ fi
 AM_BACKSLASH='\'
 
 
-ac_config_files="$ac_config_files Makefile doc/Makefile data/Makefile extra/fjmem/Makefile include/Makefile include/urjtag/Makefile src/Makefile src/urjtag.pc src/lib/Makefile src/tap/Makefile src/part/Makefile src/bus/Makefile src/flash/Makefile src/cmd/Makefile src/svf/Makefile src/bsdl/Makefile src/stapl/Makefile src/jim/Makefile src/pld/Makefile src/global/Makefile"
+ac_config_files="$ac_config_files Makefile doc/Makefile data/Makefile extra/fjmem/Makefile include/Makefile include/urjtag/Makefile src/Makefile src/urjtag.pc src/lib/Makefile src/tap/Makefile src/part/Makefile src/bus/Makefile src/flash/Makefile src/cmd/Makefile src/svf/Makefile src/bsdl/Makefile src/stapl/Makefile src/jim/Makefile src/pld/Makefile src/global/Makefile src/apps/jtag/Makefile src/apps/bsdl2jtag/Makefile"
 
 
 
@@ -18189,6 +18194,43 @@ fi
 
 CPPFLAGS='-I$(top_srcdir) -I$(top_srcdir)/include '${CPPFLAGS}
 
+# Check whether --enable-apps was given.
+if test ${enable_apps+y}
+then :
+  enableval=$enable_apps;
+else $as_nop
+  enable_apps=yes
+fi
+
+
+if test "x$enable_apps" = xyes
+then :
+
+   if true; then
+  ENABLE_APPS_TRUE=
+  ENABLE_APPS_FALSE='#'
+else
+  ENABLE_APPS_TRUE='#'
+  ENABLE_APPS_FALSE=
+fi
+
+
+printf "%s\n" "#define ENABLE_APPS 1" >>confdefs.h
+
+
+else $as_nop
+
+   if false; then
+  ENABLE_APPS_TRUE=
+  ENABLE_APPS_FALSE='#'
+else
+  ENABLE_APPS_TRUE='#'
+  ENABLE_APPS_FALSE=
+fi
+
+
+fi
+
 # check for lex/flex
 for ac_prog in flex lex
 do
@@ -21252,6 +21294,14 @@ if test -z "${HAVE_INPOUTXX_TRUE}" && test -z "${HAVE_INPOUTXX_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_INPOUTXX\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
+if test -z "${ENABLE_APPS_TRUE}" && test -z "${ENABLE_APPS_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_APPS\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${ENABLE_APPS_TRUE}" && test -z "${ENABLE_APPS_FALSE}"; then
+  as_fn_error $? "conditional \"ENABLE_APPS\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
 if test -z "${ENABLE_SVF_TRUE}" && test -z "${ENABLE_SVF_FALSE}"; then
   as_fn_error $? "conditional \"ENABLE_SVF\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
@@ -22709,6 +22759,8 @@ do
     "src/jim/Makefile") CONFIG_FILES="$CONFIG_FILES src/jim/Makefile" ;;
     "src/pld/Makefile") CONFIG_FILES="$CONFIG_FILES src/pld/Makefile" ;;
     "src/global/Makefile") CONFIG_FILES="$CONFIG_FILES src/global/Makefile" ;;
+    "src/apps/jtag/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/jtag/Makefile" ;;
+    "src/apps/bsdl2jtag/Makefile") CONFIG_FILES="$CONFIG_FILES src/apps/bsdl2jtag/Makefile" ;;
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
     "include/urjtag/urjtag.h") CONFIG_HEADERS="$CONFIG_HEADERS include/urjtag/urjtag.h" ;;
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;

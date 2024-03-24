@@ -1,3 +1,4 @@
 debian/liburjtag/usr/include/urjtag/*
+debian/liburjtag/usr/bin/*
 debian/liburjtag/usr/lib/*
 debian/liburjtag/usr/lib/*/*

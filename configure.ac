@@ -96,6 +96,8 @@ AC_CONFIG_FILES(
 	src/jim/Makefile
 	src/pld/Makefile
 	src/global/Makefile
+	src/apps/jtag/Makefile
+	src/apps/bsdl2jtag/Makefile
 )
 
 AM_MAINTAINER_MODE
@@ -374,6 +376,18 @@ AS_IF([test "x$enable_werror" = xyes], [
 AC_SUBST(WARNINGCFLAGS)
 
 AS_VAR_PREPEND([CPPFLAGS], '-I$(top_srcdir) -I$(top_srcdir)/include ')
+
+AC_ARG_ENABLE([apps],
+  [AS_HELP_STRING([--disable-apps],
+    [disable building the jtag and bsdl2jtag main programs])],,
+    [enable_apps=yes])
+
+AS_IF([test "x$enable_apps" = xyes], [
+  AM_CONDITIONAL(ENABLE_APPS, true)
+  AC_DEFINE(ENABLE_APPS, 1, [define if you want to build the jtag and bsdl2jtag main programs])
+],[
+  AM_CONDITIONAL(ENABLE_APPS, false)
+])
 
 # check for lex/flex
 AC_PROG_LEX
