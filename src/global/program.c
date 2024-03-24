@@ -36,7 +36,7 @@ int32_t program_jtag(int32_t fd, const char *drivername, const char* params[], c
     urj_chain_t *chain;
     urj_part_t *part;
     const urj_cable_driver_t *driver;
-    const urj_param_t **cable_params;
+    const urj_param_t **cable_params = NULL;
     FILE *svf = fdopen(fd, "r");
     err = (svf == NULL);
     if(err) return ENOENT;
