@@ -1,0 +1,917 @@
+cmake_minimum_required(VERSION 2.8...4.0)
+
+project(urjtag C CXX)
+
+LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules/")
+
+include(GNUInstallDirs)
+
+find_package(Threads REQUIRED)
+find_package(READLINE REQUIRED)
+find_package(FTDI REQUIRED)
+find_package(FTDI1 REQUIRED)
+find_package(USB1 REQUIRED)
+
+set(PACKAGE_NAME "UrJTAG")
+set(LIB_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(URJTAG_VERSION_MAJOR 0)
+set(URJTAG_VERSION_MINOR 14)
+set(URJTAG_VERSION "${URJTAG_VERSION_MAJOR}.${URJTAG_VERSION_MINOR}")
+set(URJTAG_SOVERSION ${URJTAG_VERSION_MAJOR})
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.cmake ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile )
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/FindURJTAG.cmake ${CMAKE_CURRENT_BINARY_DIR}/FindURJTAG.cmake )
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_INCLUDE_PATH})
+include_directories(${READLINE_INCLUDE_DIR})
+include_directories(${FTDI_INCLUDE_DIR})
+include_directories(${FTDI1_INCLUDE_DIR})
+include_directories(${USB1_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/tap)
+link_directories(${CMAKE_LIBRARY_PATH})
+
+execute_process (COMMAND doxygen ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+add_definitions(-DHAVE_LIBREADLINE)
+add_definitions(-DHAVE_READLINE_HISTORY_H)
+add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_STDLIB)
+add_definitions(-DHAVE_STDIO)
+add_definitions(-DJTAG_DATA_DIR="${DATADIR}/urjtag")
+
+set (all_cmd_files
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_include.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_salias.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_instruction.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_get.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_pld.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_print.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_initbus.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_peekpoke.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_part.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_idcode.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_stapl.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_cable.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_register.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_shift.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_svf.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_quit.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_detectflash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_lockflash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_discovery.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_eraseflash.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_dr.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_signal.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_test.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_cmd.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_reset.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_bsdl.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_shell.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_help.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_bus.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_set.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_flashmem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_addpart.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_detect.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_readmem.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_frequency.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_endian.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_debug.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_pod.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_scan.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_bit.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_usleep.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/cmd/cmd_writemem.c
+)
+execute_process (COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/generate_cmd_list.sh ${all_cmd_files} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+FIND_PACKAGE(BISON REQUIRED)
+IF(BISON_FOUND)
+SET(BISON_BSDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${BISON_BSDL_OUTPUT}
+    COMMAND ${BISON_EXECUTABLE}
+    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.h
+    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_sem.c
+    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c
+    --output=${BISON_BSDL_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_bison.y
+    COMMENT "Generating bsdl_parser.c"
+)
+SET(BISON_VHDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_parser.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${BISON_VHDL_OUTPUT}
+    COMMAND ${BISON_EXECUTABLE}
+    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.h
+    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c
+    --output=${BISON_VHDL_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_bison.y
+    COMMENT "Generating vhdl_parser.c"
+)
+SET(BISON_SVF_OUTPUT ${CMAKE_SOURCE_DIR}/src/svf/svf_parser.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${BISON_SVF_OUTPUT}
+    COMMAND ${BISON_EXECUTABLE}
+    --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.h
+    --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.c
+    --output=${BISON_SVF_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/svf/svf_bison.y
+    COMMENT "Generating svf_parser.c"
+)
+ENDIF()
+
+
+FIND_PACKAGE(FLEX REQUIRED)
+IF(FLEX_FOUND)
+SET(FLEX_BSDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_scanner.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${FLEX_BSDL_OUTPUT}
+    COMMAND ${FLEX_EXECUTABLE}
+    --outfile=${FLEX_BSDL_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_flex.l
+    COMMENT "Generating bsdl_scanner.c"
+)
+SET(FLEX_VHDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_scanner.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${FLEX_VHDL_OUTPUT}
+    COMMAND ${FLEX_EXECUTABLE}
+    --outfile=${FLEX_VHDL_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_flex.l
+    COMMENT "Generating vhdl_scanner.c"
+)
+SET(FLEX_SVF_OUTPUT ${CMAKE_SOURCE_DIR}/src/svf/svf_scanner.c)
+ADD_CUSTOM_COMMAND(
+    OUTPUT ${FLEX_SVF_OUTPUT}
+    COMMAND ${FLEX_EXECUTABLE}
+    --outfile=${FLEX_SVF_OUTPUT}
+    ${CMAKE_SOURCE_DIR}/src/svf/svf_flex.l
+    COMMENT "Generating svf_scanner.c"
+)
+ENDIF()
+
+set(SOURCES
+${FLEX_BSDL_OUTPUT}
+${FLEX_VHDL_OUTPUT}
+${FLEX_SVF_OUTPUT}
+${BISON_BSDL_OUTPUT}
+${BISON_VHDL_OUTPUT}
+${BISON_SVF_OUTPUT}
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/amd.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/jedec.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/jedec_exp.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/detectflash.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/intel.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/flash.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/cfi.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/flash/amd_flash.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/lbasename.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/getline.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/getdelim.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/fclock.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/hex.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/safe-ctype.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/lrealpath.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/lib/make-relative-prefix.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/part/signal.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/part/data_register.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/part/part.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/part/instruction.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/part/bsbit.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ixp425.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/slsup3.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sa1110.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/bcm1250.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/mpc824x.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/generic_bus.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/s3c4510x.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sh7750r.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ahbjtag.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/arm9tdmi.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/writemem.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ixp435.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/tx4925.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sharc21369_ezkit.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/avr32.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/fjmem.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/h7202.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ejtag_dma.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sh7751r.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/jopcyc.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/readmem.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ppc440gx_ebc8.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/mpc5200.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/au1500.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/prototype.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/buses.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sharc21065l.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/bscoach.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ejtag.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/zefant-xs3.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ppc405ep.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/sh7727.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/ixp465.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/mpc8313.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/pxa2x0.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/mpc837x.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/bus/lh7a400.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/jim/jim_tap.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/jim/some_cpu.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/jim/intel_28f800b3.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/pld/xilinx_bitstream.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/pld/pld.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/pld/xilinx.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/svf/svf.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/svf/y.tab.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/state.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/detect.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/register.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/discovery.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/usbconn/libftdi.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/usbconn/libusb.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/usbconn.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/idcode.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/ei012.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/arcom.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/wiggler.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/dirtyjtag.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/gpio.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/ft2232.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/cmd_xfer.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/ts7800.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/mpcbdm.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/byteblaster.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/wiggler2.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/jim.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/usbblaster.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/generic.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/ea253.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/xpc.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/minimal.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/lattice.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/generic_usbconn.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/generic_parport.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/keithkoep.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/triton.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/vsllink.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/ice100.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/vision_ep9307.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/cable/dlc5.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/parport.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/chain.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/tap/tap.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/global/params.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/global/parse.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/global/data_dir.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/global/log-error.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/global/program.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamcrc.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamcomp.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamheap.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamnote.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamexp.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/stapl.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamarray.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamjtag.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamstack.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamsym.c
+${CMAKE_CURRENT_SOURCE_DIR}/src/stapl/jamexec.c )
+
+set(INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include/cable.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/stapl.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bssignal.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bitmask.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/pod.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/svf.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/flash.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/safe-ctype.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/params.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/usbconn.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/jtag.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/urjtag.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/lex.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/tap_state.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/jim.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bsdl_mode.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/error.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/parport.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/part_instruction.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bitops.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bfin.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bus.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/log.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/tap.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/filenames.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/fclock.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/gettext.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/part.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bus_driver.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/tap_register.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/sysdep.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/parse.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/pld.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/urj_types.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/ansidecl.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/chain.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/data_register.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bsbit.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/cmd.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/bsdl.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/libiberty.h
+)
+
+set(DATA ${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8379/mpc8379
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8379/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8377/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8377/mpc8377
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc5646/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc5646/mpc5646
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8378/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc8378/mpc8378
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc5200/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/freescale/mpc5200/mpc5200
+${CMAKE_CURRENT_SOURCE_DIR}/data/sharp/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/sharp/lh7a400/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/sharp/lh7a400/lh7a400
+${CMAKE_CURRENT_SOURCE_DIR}/data/bsdl/STD_1532_2001
+${CMAKE_CURRENT_SOURCE_DIR}/data/bsdl/STD_1149_1_1990
+${CMAKE_CURRENT_SOURCE_DIR}/data/bsdl/STD_1149_1_2001
+${CMAKE_CURRENT_SOURCE_DIR}/data/bsdl/STD_1149_1_1994
+${CMAKE_CURRENT_SOURCE_DIR}/data/bsdl/STD_1532_2002
+${CMAKE_CURRENT_SOURCE_DIR}/data/Makefile.am
+${CMAKE_CURRENT_SOURCE_DIR}/data/motorola/mpc8245/1.2
+${CMAKE_CURRENT_SOURCE_DIR}/data/motorola/mpc8241/1.2
+${CMAKE_CURRENT_SOURCE_DIR}/data/dec/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/dec/sa1100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/dec/sa1100/sa1100
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/atf15xx/atf1504asv
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/atf15xx/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/atmega128/atmega128
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/atmega128/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/at91sam7s256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/at91sam7s256/at91sam7s_tq48v0
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/at91sam7s256/at91sam7s_tq64v0
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/at32ap7000/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atmel/at32ap7000/at32ap7000
+${CMAKE_CURRENT_SOURCE_DIR}/data/sigma/smp8634/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/sigma/smp8634/smp8634
+${CMAKE_CURRENT_SOURCE_DIR}/data/sigma/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/sharc21369/sharc21369
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/sharc21369/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf561/bf561
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf561/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf538/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf538/bf538
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf592/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf592/bf592
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bfin/bfin
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf506/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf506/bf506
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf527/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf527/bf527
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf533/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf533/bf533
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf518/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf518/bf518
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf548/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf548/bf548
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/sharc21065l/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/sharc21065l/sharc21065l
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf537/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/analog/bf537/bf537
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/sh7729/sh7729
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/sh7729/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/ar7300/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/ar7300/ar7300
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/hd64465/hd64465
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/sh7727/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/hitachi/sh7727/sh7727
+${CMAKE_CURRENT_SOURCE_DIR}/data/MANUFACTURERS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ti/tnetv1061/tnetv1061
+${CMAKE_CURRENT_SOURCE_DIR}/data/ti/tnetv1061/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ti/tnetv1060/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ti/tnetv1060/tnetv1060
+${CMAKE_CURRENT_SOURCE_DIR}/data/ti/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/amd/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88f5182/88f5182-a2
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88f5182/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88w8500/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88w8500/88w8500-ban
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88e1118/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/marvell/88e1118/88e1118
+${CMAKE_CURRENT_SOURCE_DIR}/data/samsung/s3c4510b/s3c4510b
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c12/ep1c12
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c12/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c12/f256
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c12/f324
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c12/q240
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c20f400/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c20f400/ep1c20f400
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270z/t144
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270z/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270z/5m1270z
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270z/f256
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270zf324/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/5m1270zf324/5m1270zf324
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm7128aetc100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm7128aetc100/epm7128aetc100
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep2c8/t144
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep2c8/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep2c8/f256
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep2c8/ep2c8
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep2c8/q208
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm3064a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm3064a/t44
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm3064a/t100
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm3064a/l44
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/epm3064a/epm3064a
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c6q240/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/altera/ep1c6q240/ep1c6q240
+${CMAKE_CURRENT_SOURCE_DIR}/data/admtek/adm5120/adm5120
+${CMAKE_CURRENT_SOURCE_DIR}/data/0/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/atheros/ar2312/ar2312
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm6348/bcm6348
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm6348/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm1250/bcm1250
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm1250/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm3310/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm3310/bcm3310
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm4702/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm4702/bcm4702
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm4712/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm4712/bcm4712
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm6358/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm6358/bcm6358
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm5421s/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/broadcom/bcm5421s/bcm5421s
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tx4925/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tx4925/tx4925
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tx4926/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tx4926/tx4926
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tmpa9xx/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/toshiba/tmpa9xx/tmpa9xx
+${CMAKE_CURRENT_SOURCE_DIR}/data/brecis/msp2006/msp2006
+${CMAKE_CURRENT_SOURCE_DIR}/data/brecis/msp2006/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/brecis/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/philips/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/philips/xcr3128xl-vq100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/philips/xcr3128xl-vq100/xcr3128xl-vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/philips/xcr3128xl-cs144/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/philips/xcr3128xl-cs144/xcr3128xl-cs144
+${CMAKE_CURRENT_SOURCE_DIR}/data/lexra/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lexra/lx5280/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lexra/lx5280/lx5280
+${CMAKE_CURRENT_SOURCE_DIR}/data/ibm/ppc405ep/ppc405ep
+${CMAKE_CURRENT_SOURCE_DIR}/data/ibm/ppc405ep/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ibm/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ibm/ppc440gx/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/ibm/ppc440gx/ppc440gx
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/pxa270/pxa270
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/pxa270/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/ixp425/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/ixp425/ixp425
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/pxa250/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/pxa250/pxa250c0
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/pxa250/pxa250
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/ixp465/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/ixp465/ixp465
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/sa1110/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/intel/sa1110/sa1110
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lcmxo3-6900-cabga256/lcmxo3-6900-cabga256
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lcmxo3-6900-cabga256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4032v-tqfp48/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4032v-tqfp48/lc4032v-tqfp48
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/m4a3-256.192-fpbga256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/m4a3-256.192-fpbga256/m4a3-256.192-fpbga256
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lfe5u-45f-cabga256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lfe5u-45f-cabga256/lfe5u-45f-cabga256
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lcmxo2-1200-csbga132/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lcmxo2-1200-csbga132/lcmxo2-1200-csbga132
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/m4a3-64.32-tqfp48/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/m4a3-64.32-tqfp48/m4a3-64.32-tqfp48
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lfec2-12e/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lfec2-12e/lfec2-12e
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4064zc/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4064zc/lc4064zc
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4128c-tqfp100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/lattice/lc4128c-tqfp100/lc4128c-tqfp100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000_fg1156
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000l_fg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000_fg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s4000/xc3s4000l_fg1156
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx140/xc4vfx140
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx140/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx140/xc4vfx140_ff1517
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xa6slx4
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4l_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4l_tqg144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xa6slx4_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4_tqg144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4l_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx4/xc6slx4_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf01s/xcf01s
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf01s/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf01s/xcf01s_vo20
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45l_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xa6slx45_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45l_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45l_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45l_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xa6slx45_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xa6slx45
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45/xc6slx45_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xc6slx45t_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xc6slx45t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xc6slx45t_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xa6slx45t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xc6slx45t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xa6slx45t_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx45t/xa6slx45t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf16p/xcf16p
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf16p/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf16p/xcf16p_vo48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf16p/xcf16p_fs48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s300e/pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s300e/xc2s300e
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s300e/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s300e/fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s300e/ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx60/xc4vfx60
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx60/xc4vfx60_ff672
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx60/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx60/xc4vfx60_ff1152
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95144xl/xc95144xl_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95144xl/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95144xl/xc95144xl_cs144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95144xl/xc95144xl_tq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/xc3s50
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/xc3s50_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/xc3s50_vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/xc3s50_cp132
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50/xc3s50_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc7a100t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc7a100t/xc7a100t-csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100t/xc6slx100t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx40/xc4vfx40_ff672
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx40/xc4vfx40
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx40/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx40/xc4vfx40_ff1152
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf04s/xcf04s
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf04s/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf04s/xcf04s_vo20
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50a/xc3s50a_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50a/xc3s50a
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50a/xc3s50a_vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s50a/xc3s50a_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75t_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75l_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xa6slx75t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xa6slx75_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75t_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xa6slx75
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75l_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75l_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75/xc6slx75_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200a/xc3s200a
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200a/xc3s200a_vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200a/xc3s200a_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200a/xc3s200a_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc18v02pc44/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc18v02pc44/xc18v02pc44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/xc3s200_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/xc3s200
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/xc3s200_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/xc3s200_vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s200/xc3s200_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400a/xc3s400a
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400a/xc3s400a_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400a/xc3s400a_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400a/xc3s400a_fg400
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s5000/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s5000/xc3s5000
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s5000/xc3s5000_fg1156
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s5000/xc3s5000_fg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx20/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx20/xc4vfx20
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx20/xc4vfx20_ff672
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25t/xc6slx25t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25t/xa6slx25t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s100e_die/xc3s100e_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s100e_die/xc3s100e_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s100e_die/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s100e_die/xc3s100e_die
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s100e_die/xc3s100e_vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400_fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s400/xc3s400_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx40/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx40/xc4vlx40
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx40/xc4vlx40_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx40/xc4vlx40_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/xc3s1000
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1000/fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx35/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx35/xc4vsx35
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx35/xc4vsx35_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx80/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx80/xc4vlx80
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx80/xc4vlx80_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s500e_fg320/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s500e_fg320/xc3s500e_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s500e_fg320/xc3s500e_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s500e_fg320/xc3s500e_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c64a-vq44/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c64a-vq44/xc2c64a-vq44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/PARTS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx200/xc4vlx200_ff1513
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx200/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx200/xc4vlx200
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx25/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx25/xc4vsx25_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx25/xc4vsx25
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150t_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150l_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150l_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150t_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150_fgg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150l_fgg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150l_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150/xc6slx150t_fgg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-cp56/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-cp56/xc2c32a-cp56
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-cv64/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-cv64/xc2c32a-cv64
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-vq44/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c32a-vq44/xc2c32a-vq44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx150t/xc6slx150t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx25/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx25/xc4vlx25_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx25/xc4vlx25
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx25/xc4vlx25_sf363
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/xc9572xl_tq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/xc9572xl_vq64
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/xc9572xl_vq44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/xc9572xl_cs48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9572xl/xc9572xl_pc44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9536xl/xc9536xl_vq44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9536xl/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9536xl/xc9536xl_pc44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9536xl/xc9536xl_cs48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc9536xl/xc9536xl_vq64
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc18v04pc44/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc18v04pc44/xc18v04pc44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl_fg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl_bg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl_pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95288xl/xc95288xl_cs280
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v80-fg256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v80-fg256/xc2v80-fg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2vp4/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2vp4/xc2vp4
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xa6slx9_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9_tqg144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xa6slx9_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xa6slx9
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xa6slx9_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9l_tqg144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx9/xc6slx9_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf08p/xcf08p_vo48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf08p/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf08p/xcf08p
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf08p/xcf08p_fs48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v250-fg256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v250-fg256/xc2v250-fg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3256xl-ft256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3256xl-ft256/xcr3256xl-ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3032xl-vq44/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3032xl-vq44/xcr3032xl-vq44
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx100/xc4vlx100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx100/xc4vlx100_ff1513
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx100/xc4vlx100_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s700a/xc3s700a_fg400
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s700a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s700a/xc3s700a_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s700a/xc3s700a
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s700a/xc3s700a_fg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3128xl-vq100/xcr3128xl-vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/xc95108_pq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/xc95108
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/xc95108_pc84
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/xc95108_tq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc95108/xc95108_pq160
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf32p/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf32p/xcf32p
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf32p/xcf32p_vo48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf32p/xcf32p_fs48
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3128xl-cs144/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcr3128xl-cs144/xcr3128xl-cs144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s200e-pq208/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2s200e-pq208/xc2s200e-pq208
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx55/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx55/xc4vsx55
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vsx55/xc4vsx55_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx100/xc4vfx100_ff1152
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx100/xc4vfx100_ff1517
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx100/xc4vfx100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100t_fgg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100l_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100t_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100t_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100l_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100l_fgg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx100/xc6slx100_csg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c256-vq100/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c256-vq100/xc2c256-vq100
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c256-tq144/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2c256-tq144/xc2c256-tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx12/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx12/xc4vfx12_sf363
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx12/xc4vfx12
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vfx12/xc4vfx12_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx160/xc4vlx160_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx160/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx160/xc4vlx160_ff1513
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx160/xc4vlx160
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf02s/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf02s/xcf02s_vo20
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xcf02s/xcf02s
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1400a/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1400a/xc3s1400a_ft256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1400a/xc3s1400a_fg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1400a/xc3s1400a_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1400a/xc3s1400a
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx60/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx60/xc4vlx60_ff1148
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx60/xc4vlx60_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx60/xc4vlx60
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xccace/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xccace/xccace_tq144
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1200e_fg320/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1200e_fg320/xc3s1200e_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75t/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75t/xa6slx75t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx75t/xc6slx75t
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500l_fg320
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500l_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500l_fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500_fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1500/xc3s1500
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25l_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25t_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25l_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25t_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25l_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25t_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25_fgg484
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xa6slx25_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx25/xc6slx25
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xa6slx16_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16l_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16l_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xa6slx16_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16_ftg256
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16l_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xa6slx16_csg324
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16l_csg225
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xa6slx16
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16_cpg196
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc6slx16/xc6slx16
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1600e/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s1600e/xc3s1600e
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000l_fg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000l_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000_fg900
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000l
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000_fg456
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000_fg676
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc3s2000/xc3s2000
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx15/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx15/xc4vlx15_sf363
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx15/xc4vlx15_ff668
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc4vlx15/xc4vlx15
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v1000-fg256/STEPPINGS
+${CMAKE_CURRENT_SOURCE_DIR}/data/xilinx/xc2v1000-fg256/xc2v1000-fg256
+)
+
+add_library(urjtag SHARED ${SOURCES} ${INCLUDES} ${PLATFORM_SOURCES})
+
+if(WIN32)
+    target_link_libraries(urjtag ws2_32 setupapi cfgmgr32)
+    target_link_libraries(jtag ws2_32 setupapi cfgmgr32)
+    target_link_libraries(bsdl2jtag ws2_32 setupapi cfgmgr32)
+else(WIN32)
+   set_target_properties(urjtag PROPERTIES VERSION ${URJTAG_VERSION} SOVERSION ${URJTAG_SOVERSION})
+endif(WIN32)
+
+target_link_libraries(urjtag ${CMAKE_THREAD_LIBS_INIT} ${READLINE_LIBRARY} ${FTDI_LIBRARY} ${FTDI1_LIBRARY} ${USB1_LIBRARY})
+
+add_executable(jtag ${CMAKE_CURRENT_SOURCE_DIR}/src/apps/jtag/jtag.c)
+add_executable(bsdl2jtag ${CMAKE_CURRENT_SOURCE_DIR}/src/apps/bsdl2jtag/bsdl2jtag.c)
+
+target_link_libraries(jtag urjtag)
+target_link_libraries(bsdl2jtag urjtag)
+
+install(TARGETS urjtag LIBRARY DESTINATION ${LIBDIR})
+install(TARGETS jtag LIBRARY DESTINATION ${BINDIR})
+install(TARGETS bsdl2jtag LIBRARY DESTINATION ${BINDIR})
+
+install(FILES ${INCLUDES} DESTINATION ${INCLUDEDIR}/urjtag)
+install(FILES ${DATA} DESTINATION ${DATADIR}/urjtag)
+install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/FindURJTAG.cmake DESTINATION "${DATADIR}/cmake-${CMAKE_MAJOR_VERSION}.${CMAKE_MINOR_VERSION}/Modules")

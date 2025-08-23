@@ -26,7 +26,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <urjtag/types.h>
 #include <urjtag/log.h>
 #include <urjtag/error.h>
 #include <urjtag/jim.h>
