@@ -21,7 +21,7 @@
 #  and other UrJTAG authors, 2007, 2008, ...
 #
 m4_define([v_maj], [0])
-m4_define([v_min], [12])
+m4_define([v_min], [14])
 m4_define([lt_cur], m4_eval(v_maj + v_min))
 m4_define([project_version], [v_maj.v_min])
 
