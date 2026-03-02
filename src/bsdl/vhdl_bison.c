@@ -63,8 +63,7 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-/* Substitute the type names.  */
-#define YYSTYPE         URJ_VHDL_STYPE
+
 /* Substitute the variable and function names.  */
 #define yyparse         urj_vhdl_parse
 #define yylex           urj_vhdl_lex
@@ -88,7 +87,7 @@
 #include "bsdl_msg.h"
 
 /* interface to flex */
-#include "vhdl_bison.tab.h"
+#include "vhdl_bison.h"
 #include "vhdl_parser.h"
 
 #ifdef DMALLOC
@@ -136,7 +135,7 @@ static void set_attr_string (urj_vhdl_parser_priv_t *, char *, char *);
 
 void yyerror (urj_vhdl_parser_priv_t *, const char *);
 
-#line 140 "vhdl_bison.tab.c"
+#line 139 "vhdl_bison.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -159,7 +158,216 @@ void yyerror (urj_vhdl_parser_priv_t *, const char *);
 #  endif
 # endif
 
-#include "vhdl_bison.tab.h"
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_URJ_VHDL_VHDL_BISON_H_INCLUDED
+# define YY_URJ_VHDL_VHDL_BISON_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int urj_vhdl_debug;
+#endif
+
+/* Token kinds.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    ENTITY = 258,                  /* ENTITY  */
+    PORT = 259,                    /* PORT  */
+    GENERIC = 260,                 /* GENERIC  */
+    USE = 261,                     /* USE  */
+    ATTRIBUTE = 262,               /* ATTRIBUTE  */
+    IS = 263,                      /* IS  */
+    OF = 264,                      /* OF  */
+    CONSTANT = 265,                /* CONSTANT  */
+    STRING = 266,                  /* STRING  */
+    END = 267,                     /* END  */
+    ALL = 268,                     /* ALL  */
+    PHYSICAL_PIN_MAP = 269,        /* PHYSICAL_PIN_MAP  */
+    PIN_MAP_STRING = 270,          /* PIN_MAP_STRING  */
+    TRUE = 271,                    /* TRUE  */
+    FALSE = 272,                   /* FALSE  */
+    SIGNAL = 273,                  /* SIGNAL  */
+    LOW = 274,                     /* LOW  */
+    BOTH = 275,                    /* BOTH  */
+    IN = 276,                      /* IN  */
+    OUT = 277,                     /* OUT  */
+    INOUT = 278,                   /* INOUT  */
+    BUFFER = 279,                  /* BUFFER  */
+    LINKAGE = 280,                 /* LINKAGE  */
+    BIT = 281,                     /* BIT  */
+    BIT_VECTOR = 282,              /* BIT_VECTOR  */
+    TO = 283,                      /* TO  */
+    DOWNTO = 284,                  /* DOWNTO  */
+    PACKAGE = 285,                 /* PACKAGE  */
+    BODY = 286,                    /* BODY  */
+    TYPE = 287,                    /* TYPE  */
+    SUBTYPE = 288,                 /* SUBTYPE  */
+    RECORD = 289,                  /* RECORD  */
+    ARRAY = 290,                   /* ARRAY  */
+    POSITIVE = 291,                /* POSITIVE  */
+    RANGE = 292,                   /* RANGE  */
+    CELL_INFO = 293,               /* CELL_INFO  */
+    INPUT = 294,                   /* INPUT  */
+    OUTPUT2 = 295,                 /* OUTPUT2  */
+    OUTPUT3 = 296,                 /* OUTPUT3  */
+    CONTROL = 297,                 /* CONTROL  */
+    CONTROLR = 298,                /* CONTROLR  */
+    INTERNAL = 299,                /* INTERNAL  */
+    CLOCK = 300,                   /* CLOCK  */
+    BIDIR = 301,                   /* BIDIR  */
+    BIDIR_IN = 302,                /* BIDIR_IN  */
+    BIDIR_OUT = 303,               /* BIDIR_OUT  */
+    EXTEST = 304,                  /* EXTEST  */
+    SAMPLE = 305,                  /* SAMPLE  */
+    INTEST = 306,                  /* INTEST  */
+    RUNBIST = 307,                 /* RUNBIST  */
+    PI = 308,                      /* PI  */
+    PO = 309,                      /* PO  */
+    UPD = 310,                     /* UPD  */
+    CAP = 311,                     /* CAP  */
+    X = 312,                       /* X  */
+    BIN_X_PATTERN = 313,           /* BIN_X_PATTERN  */
+    ZERO = 314,                    /* ZERO  */
+    ONE = 315,                     /* ONE  */
+    Z = 316,                       /* Z  */
+    IDENTIFIER = 317,              /* IDENTIFIER  */
+    SINGLE_QUOTE = 318,            /* SINGLE_QUOTE  */
+    QUOTED_STRING = 319,           /* QUOTED_STRING  */
+    DECIMAL_NUMBER = 320,          /* DECIMAL_NUMBER  */
+    REAL_NUMBER = 321,             /* REAL_NUMBER  */
+    CONCATENATE = 322,             /* CONCATENATE  */
+    SEMICOLON = 323,               /* SEMICOLON  */
+    COMMA = 324,                   /* COMMA  */
+    LPAREN = 325,                  /* LPAREN  */
+    RPAREN = 326,                  /* RPAREN  */
+    COLON = 327,                   /* COLON  */
+    BOX = 328,                     /* BOX  */
+    COLON_EQUAL = 329,             /* COLON_EQUAL  */
+    PERIOD = 330,                  /* PERIOD  */
+    ILLEGAL = 331,                 /* ILLEGAL  */
+    BSDL_EXTENSION = 332,          /* BSDL_EXTENSION  */
+    OBSERVE_ONLY = 333,            /* OBSERVE_ONLY  */
+    STD_1532_2001 = 334,           /* STD_1532_2001  */
+    STD_1532_2002 = 335            /* STD_1532_2002  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
+#endif
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
+#define ENTITY 258
+#define PORT 259
+#define GENERIC 260
+#define USE 261
+#define ATTRIBUTE 262
+#define IS 263
+#define OF 264
+#define CONSTANT 265
+#define STRING 266
+#define END 267
+#define ALL 268
+#define PHYSICAL_PIN_MAP 269
+#define PIN_MAP_STRING 270
+#define TRUE 271
+#define FALSE 272
+#define SIGNAL 273
+#define LOW 274
+#define BOTH 275
+#define IN 276
+#define OUT 277
+#define INOUT 278
+#define BUFFER 279
+#define LINKAGE 280
+#define BIT 281
+#define BIT_VECTOR 282
+#define TO 283
+#define DOWNTO 284
+#define PACKAGE 285
+#define BODY 286
+#define TYPE 287
+#define SUBTYPE 288
+#define RECORD 289
+#define ARRAY 290
+#define POSITIVE 291
+#define RANGE 292
+#define CELL_INFO 293
+#define INPUT 294
+#define OUTPUT2 295
+#define OUTPUT3 296
+#define CONTROL 297
+#define CONTROLR 298
+#define INTERNAL 299
+#define CLOCK 300
+#define BIDIR 301
+#define BIDIR_IN 302
+#define BIDIR_OUT 303
+#define EXTEST 304
+#define SAMPLE 305
+#define INTEST 306
+#define RUNBIST 307
+#define PI 308
+#define PO 309
+#define UPD 310
+#define CAP 311
+#define X 312
+#define BIN_X_PATTERN 313
+#define ZERO 314
+#define ONE 315
+#define Z 316
+#define IDENTIFIER 317
+#define SINGLE_QUOTE 318
+#define QUOTED_STRING 319
+#define DECIMAL_NUMBER 320
+#define REAL_NUMBER 321
+#define CONCATENATE 322
+#define SEMICOLON 323
+#define COMMA 324
+#define LPAREN 325
+#define RPAREN 326
+#define COLON 327
+#define BOX 328
+#define COLON_EQUAL 329
+#define PERIOD 330
+#define ILLEGAL 331
+#define BSDL_EXTENSION 332
+#define OBSERVE_ONLY 333
+#define STD_1532_2001 334
+#define STD_1532_2002 335
+
+/* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
+{
+#line 191 "vhdl_bison.y"
+
+  int   integer;
+  char *str;
+
+#line 357 "vhdl_bison.c"
+
+};
+typedef union YYSTYPE YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
+
+
+
+
+int urj_vhdl_parse (urj_vhdl_parser_priv_t *priv_data);
+
+
+#endif /* !YY_URJ_VHDL_VHDL_BISON_H_INCLUDED  */
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -576,7 +784,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined URJ_VHDL_STYPE_IS_TRIVIAL && URJ_VHDL_STYPE_IS_TRIVIAL)))
+         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -699,7 +907,7 @@ static const yytype_int8 yytranslate[] =
       75,    76,    77,    78,    79,    80
 };
 
-#if URJ_VHDL_DEBUG
+#if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
@@ -724,7 +932,7 @@ static const yytype_int16 yyrline[] =
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if URJ_VHDL_DEBUG || 0
+#if YYDEBUG || 0
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -1041,7 +1249,7 @@ static const yytype_int8 yyr2[] =
 enum { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = URJ_VHDL_EMPTY)
+#define yyclearin       (yychar = YYEMPTY)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -1053,7 +1261,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == URJ_VHDL_EMPTY)                                        \
+    if (yychar == YYEMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -1069,12 +1277,12 @@ enum { YYENOMEM = -2 };
   while (0)
 
 /* Backward compatibility with an undocumented macro.
-   Use URJ_VHDL_error or URJ_VHDL_UNDEF. */
-#define YYERRCODE URJ_VHDL_UNDEF
+   Use YYerror or YYUNDEF. */
+#define YYERRCODE YYUNDEF
 
 
 /* Enable debugging if requested.  */
-#if URJ_VHDL_DEBUG
+#if YYDEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -1193,12 +1401,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !URJ_VHDL_DEBUG */
+#else /* !YYDEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !URJ_VHDL_DEBUG */
+#endif /* !YYDEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -1305,7 +1513,7 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = URJ_VHDL_EMPTY; /* Cause a token to be read.  */
+  yychar = YYEMPTY; /* Cause a token to be read.  */
 
   goto yysetstate;
 
@@ -1415,25 +1623,25 @@ yybackup:
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == URJ_VHDL_EMPTY)
+  if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, HACK);
     }
 
-  if (yychar <= URJ_VHDL_EOF)
+  if (yychar <= YYEOF)
     {
-      yychar = URJ_VHDL_EOF;
+      yychar = YYEOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == URJ_VHDL_error)
+  else if (yychar == YYerror)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
          lookahead, it is too special and may lead us to an endless
          loop in error recovery. */
-      yychar = URJ_VHDL_UNDEF;
+      yychar = YYUNDEF;
       yytoken = YYSYMBOL_YYerror;
       goto yyerrlab1;
     }
@@ -1470,7 +1678,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   /* Discard the shifted token.  */
-  yychar = URJ_VHDL_EMPTY;
+  yychar = YYEMPTY;
   goto yynewstate;
 
 
@@ -1508,7 +1716,7 @@ yyreduce:
   case 3: /* Begin_BSDL: ENTITY IDENTIFIER IS  */
 #line 230 "vhdl_bison.y"
              { urj_vhdl_set_entity (priv_data, (yyvsp[-1].str)); }
-#line 1512 "vhdl_bison.tab.c"
+#line 1720 "vhdl_bison.c"
     break;
 
   case 4: /* Begin_BSDL: error  */
@@ -1518,7 +1726,7 @@ yyreduce:
                Print_Error (priv_data, _("Check if source file is BSDL"));
                BUMP_ERROR; YYABORT;     /* Probably not a BSDL source file */
              }
-#line 1522 "vhdl_bison.tab.c"
+#line 1730 "vhdl_bison.c"
     break;
 
   case 6: /* BSDL_Body: error  */
@@ -1527,13 +1735,13 @@ yyreduce:
               Print_Error (priv_data, _("Syntax Error"));
               BUMP_ERROR; YYABORT;
             }
-#line 1531 "vhdl_bison.tab.c"
+#line 1739 "vhdl_bison.c"
     break;
 
   case 7: /* End_BSDL: END IDENTIFIER SEMICOLON  */
 #line 249 "vhdl_bison.y"
            { free ((yyvsp[-1].str)); }
-#line 1537 "vhdl_bison.tab.c"
+#line 1745 "vhdl_bison.c"
     break;
 
   case 8: /* End_BSDL: error  */
@@ -1542,7 +1750,7 @@ yyreduce:
              Print_Error (priv_data, _("Syntax Error"));
              BUMP_ERROR; YYABORT;
            }
-#line 1546 "vhdl_bison.tab.c"
+#line 1754 "vhdl_bison.c"
     break;
 
   case 11: /* VHDL_Port: error  */
@@ -1551,43 +1759,43 @@ yyreduce:
                         Print_Error (priv_data, _("Improper Port declaration"));
                         BUMP_ERROR; YYABORT;
                       }
-#line 1555 "vhdl_bison.tab.c"
+#line 1763 "vhdl_bison.c"
     break;
 
   case 14: /* Port_Specifier: Port_List COLON Function Scaler_Or_Vector  */
 #line 270 "vhdl_bison.y"
                       { urj_vhdl_port_apply_port (priv_data); }
-#line 1561 "vhdl_bison.tab.c"
+#line 1769 "vhdl_bison.c"
     break;
 
   case 15: /* Port_List: IDENTIFIER  */
 #line 273 "vhdl_bison.y"
                       { urj_vhdl_port_add_name (priv_data, (yyvsp[0].str)); }
-#line 1567 "vhdl_bison.tab.c"
+#line 1775 "vhdl_bison.c"
     break;
 
   case 16: /* Port_List: Port_List COMMA IDENTIFIER  */
 #line 275 "vhdl_bison.y"
                       { urj_vhdl_port_add_name (priv_data, (yyvsp[0].str)); }
-#line 1573 "vhdl_bison.tab.c"
+#line 1781 "vhdl_bison.c"
     break;
 
   case 22: /* Scaler_Or_Vector: BIT  */
 #line 280 "vhdl_bison.y"
                       { urj_vhdl_port_add_bit (priv_data); }
-#line 1579 "vhdl_bison.tab.c"
+#line 1787 "vhdl_bison.c"
     break;
 
   case 24: /* Vector_Range: DECIMAL_NUMBER TO DECIMAL_NUMBER  */
 #line 284 "vhdl_bison.y"
                       { urj_vhdl_port_add_range (priv_data, (yyvsp[-2].integer), (yyvsp[0].integer)); }
-#line 1585 "vhdl_bison.tab.c"
+#line 1793 "vhdl_bison.c"
     break;
 
   case 25: /* Vector_Range: DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER  */
 #line 286 "vhdl_bison.y"
                       { urj_vhdl_port_add_range (priv_data, (yyvsp[0].integer), (yyvsp[-2].integer)); }
-#line 1591 "vhdl_bison.tab.c"
+#line 1799 "vhdl_bison.c"
     break;
 
   case 30: /* VHDL_Use_Part: error  */
@@ -1596,7 +1804,7 @@ yyreduce:
                   Print_Error (priv_data, _("Error in Package declaration(s)"));
                   BUMP_ERROR; YYABORT;
                 }
-#line 1600 "vhdl_bison.tab.c"
+#line 1808 "vhdl_bison.c"
     break;
 
   case 31: /* $@1: %empty  */
@@ -1605,7 +1813,7 @@ yyreduce:
                   strcpy (priv_data->Package_File_Name, (yyvsp[0].str));
                   free ((yyvsp[0].str));
                 }
-#line 1609 "vhdl_bison.tab.c"
+#line 1817 "vhdl_bison.c"
     break;
 
   case 32: /* $@2: %empty  */
@@ -1615,7 +1823,7 @@ yyreduce:
                   urj_vhdl_flex_switch_file (priv_data->scanner,
                                              priv_data->Package_File_Name);
                 }
-#line 1619 "vhdl_bison.tab.c"
+#line 1827 "vhdl_bison.c"
     break;
 
   case 33: /* Standard_Use: USE IDENTIFIER $@1 PERIOD ALL SEMICOLON $@2 Standard_Package  */
@@ -1623,13 +1831,13 @@ yyreduce:
                 {
                   priv_data->Reading_Package = 0;
                 }
-#line 1627 "vhdl_bison.tab.c"
+#line 1835 "vhdl_bison.c"
     break;
 
   case 34: /* Standard_Package: PACKAGE IDENTIFIER IS Standard_Decls Defered_Constants Standard_Decls END IDENTIFIER SEMICOLON Package_Body  */
 #line 316 "vhdl_bison.y"
                    { free ((yyvsp[-8].str)); free ((yyvsp[-2].str)); }
-#line 1633 "vhdl_bison.tab.c"
+#line 1841 "vhdl_bison.c"
     break;
 
   case 35: /* Standard_Package: error  */
@@ -1638,25 +1846,25 @@ yyreduce:
                      Print_Error (priv_data, _("Error in Standard Package"));
                      BUMP_ERROR; YYABORT;
                    }
-#line 1642 "vhdl_bison.tab.c"
+#line 1850 "vhdl_bison.c"
     break;
 
   case 38: /* Standard_Decl: ATTRIBUTE IDENTIFIER COLON Attribute_Type SEMICOLON  */
 #line 327 "vhdl_bison.y"
                  { free ((yyvsp[-3].str)); }
-#line 1648 "vhdl_bison.tab.c"
+#line 1856 "vhdl_bison.c"
     break;
 
   case 39: /* Standard_Decl: TYPE IDENTIFIER IS Type_Body SEMICOLON  */
 #line 329 "vhdl_bison.y"
                  { free ((yyvsp[-3].str)); }
-#line 1654 "vhdl_bison.tab.c"
+#line 1862 "vhdl_bison.c"
     break;
 
   case 40: /* Standard_Decl: TYPE CELL_INFO IS ARRAY LPAREN POSITIVE RANGE BOX RPAREN OF IDENTIFIER SEMICOLON  */
 #line 332 "vhdl_bison.y"
                  { free ((yyvsp[-1].str)); }
-#line 1660 "vhdl_bison.tab.c"
+#line 1868 "vhdl_bison.c"
     break;
 
   case 43: /* Standard_Decl: error  */
@@ -1665,13 +1873,13 @@ yyreduce:
                    Print_Error (priv_data, _("Error in Standard Declarations"));
                    BUMP_ERROR; YYABORT;
                  }
-#line 1669 "vhdl_bison.tab.c"
+#line 1877 "vhdl_bison.c"
     break;
 
   case 44: /* Attribute_Type: IDENTIFIER  */
 #line 342 "vhdl_bison.y"
                  { free ((yyvsp[0].str)); }
-#line 1675 "vhdl_bison.tab.c"
+#line 1883 "vhdl_bison.c"
     break;
 
   case 48: /* Attribute_Type: error  */
@@ -1680,19 +1888,19 @@ yyreduce:
                    Print_Error (priv_data, _("Error in Attribute type identification"));
                    BUMP_ERROR; YYABORT;
                  }
-#line 1684 "vhdl_bison.tab.c"
+#line 1892 "vhdl_bison.c"
     break;
 
   case 52: /* Type_Body: ARRAY LPAREN DECIMAL_NUMBER TO DECIMAL_NUMBER RPAREN OF IDENTIFIER  */
 #line 357 "vhdl_bison.y"
                  { free ((yyvsp[0].str)); }
-#line 1690 "vhdl_bison.tab.c"
+#line 1898 "vhdl_bison.c"
     break;
 
   case 53: /* Type_Body: ARRAY LPAREN DECIMAL_NUMBER DOWNTO DECIMAL_NUMBER RPAREN OF IDENTIFIER  */
 #line 360 "vhdl_bison.y"
                  { free ((yyvsp[0].str)); }
-#line 1696 "vhdl_bison.tab.c"
+#line 1904 "vhdl_bison.c"
     break;
 
   case 55: /* Type_Body: error  */
@@ -1701,25 +1909,25 @@ yyreduce:
                    Print_Error (priv_data, _("Error in Type definition"));
                    BUMP_ERROR; YYABORT;
                  }
-#line 1705 "vhdl_bison.tab.c"
+#line 1913 "vhdl_bison.c"
     break;
 
   case 58: /* ID_List: IDENTIFIER  */
 #line 372 "vhdl_bison.y"
                  { free ((yyvsp[0].str)); }
-#line 1711 "vhdl_bison.tab.c"
+#line 1919 "vhdl_bison.c"
     break;
 
   case 59: /* ID_List: ID_List COMMA IDENTIFIER  */
 #line 374 "vhdl_bison.y"
                  { free ((yyvsp[0].str)); }
-#line 1717 "vhdl_bison.tab.c"
+#line 1925 "vhdl_bison.c"
     break;
 
   case 60: /* ID_Bit: SINGLE_QUOTE BIN_X_PATTERN SINGLE_QUOTE  */
 #line 377 "vhdl_bison.y"
                  { free ((yyvsp[-1].str)); }
-#line 1723 "vhdl_bison.tab.c"
+#line 1931 "vhdl_bison.c"
     break;
 
   case 61: /* ID_Bit: error  */
@@ -1728,13 +1936,13 @@ yyreduce:
                    Print_Error (priv_data, _("Error in Bit definition"));
                    BUMP_ERROR; YYABORT;
                  }
-#line 1732 "vhdl_bison.tab.c"
+#line 1940 "vhdl_bison.c"
     break;
 
   case 64: /* Record_Element: IDENTIFIER COLON IDENTIFIER SEMICOLON  */
 #line 388 "vhdl_bison.y"
                  { free ((yyvsp[-3].str)); free ((yyvsp[-1].str)); }
-#line 1738 "vhdl_bison.tab.c"
+#line 1946 "vhdl_bison.c"
     break;
 
   case 65: /* Record_Element: error  */
@@ -1743,13 +1951,13 @@ yyreduce:
                    Print_Error (priv_data, _("Error in Record Definition"));
                    BUMP_ERROR; YYABORT;
                  }
-#line 1747 "vhdl_bison.tab.c"
+#line 1955 "vhdl_bison.c"
     break;
 
   case 69: /* Constant_Body: IDENTIFIER COLON CELL_INFO SEMICOLON  */
 #line 401 "vhdl_bison.y"
                     { free ((yyvsp[-3].str)); }
-#line 1753 "vhdl_bison.tab.c"
+#line 1961 "vhdl_bison.c"
     break;
 
   case 70: /* Constant_Body: error  */
@@ -1758,13 +1966,13 @@ yyreduce:
                       Print_Error (priv_data, _("Error in defered constant"));
                       BUMP_ERROR; YYABORT;
                     }
-#line 1762 "vhdl_bison.tab.c"
+#line 1970 "vhdl_bison.c"
     break;
 
   case 73: /* $@3: %empty  */
 #line 412 "vhdl_bison.y"
                   { free ((yyvsp[-4].str)); free ((yyvsp[0].str)); }
-#line 1768 "vhdl_bison.tab.c"
+#line 1976 "vhdl_bison.c"
     break;
 
   case 75: /* Package_Body: error  */
@@ -1773,13 +1981,13 @@ yyreduce:
                     Print_Error (priv_data, _("Error in Package Body definition"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1777 "vhdl_bison.tab.c"
+#line 1985 "vhdl_bison.c"
     break;
 
   case 78: /* Cell_Constant: CONSTANT IDENTIFIER COLON CELL_INFO COLON_EQUAL LPAREN Triples_List RPAREN SEMICOLON  */
 #line 425 "vhdl_bison.y"
                   { free ((yyvsp[-7].str)); }
-#line 1783 "vhdl_bison.tab.c"
+#line 1991 "vhdl_bison.c"
     break;
 
   case 79: /* Cell_Constant: error  */
@@ -1788,7 +1996,7 @@ yyreduce:
                     Print_Error (priv_data, _("Error in Cell Constant definition"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1792 "vhdl_bison.tab.c"
+#line 2000 "vhdl_bison.c"
     break;
 
   case 83: /* Triple: error  */
@@ -1797,7 +2005,7 @@ yyreduce:
                     Print_Error (priv_data, _("Error in Cell Data Record"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1801 "vhdl_bison.tab.c"
+#line 2009 "vhdl_bison.c"
     break;
 
   case 94: /* Triple_Function: error  */
@@ -1806,7 +2014,7 @@ yyreduce:
                     Print_Error (priv_data, _("Error in Cell_Type Function field"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1810 "vhdl_bison.tab.c"
+#line 2018 "vhdl_bison.c"
     break;
 
   case 99: /* Triple_Inst: error  */
@@ -1815,7 +2023,7 @@ yyreduce:
                     Print_Error (priv_data, _("Error in BScan_Inst Instruction field"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1819 "vhdl_bison.tab.c"
+#line 2027 "vhdl_bison.c"
     break;
 
   case 107: /* CAP_Data: error  */
@@ -1824,7 +2032,7 @@ yyreduce:
                     Print_Error (priv_data, _("Error in Constant CAP data source field"));
                     BUMP_ERROR; YYABORT;
                   }
-#line 1828 "vhdl_bison.tab.c"
+#line 2036 "vhdl_bison.c"
     break;
 
   case 108: /* $@4: %empty  */
@@ -1833,7 +2041,7 @@ yyreduce:
                     strcpy(priv_data->Package_File_Name, (yyvsp[0].str));
                     free((yyvsp[0].str));
                    }
-#line 1837 "vhdl_bison.tab.c"
+#line 2045 "vhdl_bison.c"
     break;
 
   case 109: /* $@5: %empty  */
@@ -1843,7 +2051,7 @@ yyreduce:
                      urj_vhdl_flex_switch_file (priv_data->scanner,
                                                 priv_data->Package_File_Name);
                    }
-#line 1847 "vhdl_bison.tab.c"
+#line 2055 "vhdl_bison.c"
     break;
 
   case 110: /* VHDL_Use: USE IDENTIFIER $@4 PERIOD ALL SEMICOLON $@5 User_Package  */
@@ -1851,20 +2059,20 @@ yyreduce:
                    {
                      priv_data->Reading_Package = 0;
                    }
-#line 1855 "vhdl_bison.tab.c"
+#line 2063 "vhdl_bison.c"
     break;
 
   case 111: /* User_Package: PACKAGE IDENTIFIER IS Defered_Constants END IDENTIFIER SEMICOLON Package_Body  */
 #line 484 "vhdl_bison.y"
                    { free((yyvsp[-6].str)); free((yyvsp[-2].str)); }
-#line 1861 "vhdl_bison.tab.c"
+#line 2069 "vhdl_bison.c"
     break;
 
   case 112: /* User_Package: error  */
 #line 486 "vhdl_bison.y"
                    {Print_Error(priv_data, _("Error in User-Defined Package declarations"));
                     BUMP_ERROR; YYABORT; }
-#line 1868 "vhdl_bison.tab.c"
+#line 2076 "vhdl_bison.c"
     break;
 
   case 115: /* VHDL_Elements: error  */
@@ -1873,13 +2081,13 @@ yyreduce:
                   Print_Error (priv_data, _("Unknown VHDL statement"));
                   BUMP_ERROR; YYABORT;
                 }
-#line 1877 "vhdl_bison.tab.c"
+#line 2085 "vhdl_bison.c"
     break;
 
   case 119: /* VHDL_Constant_Part: IDENTIFIER COLON PIN_MAP_STRING COLON_EQUAL Quoted_String SEMICOLON  */
 #line 505 "vhdl_bison.y"
                      { free ((yyvsp[-5].str)); }
-#line 1883 "vhdl_bison.tab.c"
+#line 2091 "vhdl_bison.c"
     break;
 
   case 126: /* VHDL_Attribute_Types: error  */
@@ -1888,7 +2096,7 @@ yyreduce:
                          Print_Error (priv_data, _("Error in Attribute specification"));
                          BUMP_ERROR; YYABORT;
                        }
-#line 1892 "vhdl_bison.tab.c"
+#line 2100 "vhdl_bison.c"
     break;
 
   case 127: /* VHDL_Attr_Boolean: IDENTIFIER OF IDENTIFIER COLON SIGNAL IS Boolean SEMICOLON  */
@@ -1899,19 +2107,19 @@ yyreduce:
                        /* skip boolean attributes for the time being */
                        free ((yyvsp[-7].str)); free ((yyvsp[-5].str));
                      }
-#line 1903 "vhdl_bison.tab.c"
+#line 2111 "vhdl_bison.c"
     break;
 
   case 128: /* Boolean: TRUE  */
 #line 529 "vhdl_bison.y"
                      { (yyval.integer) = 1; }
-#line 1909 "vhdl_bison.tab.c"
+#line 2117 "vhdl_bison.c"
     break;
 
   case 129: /* Boolean: FALSE  */
 #line 531 "vhdl_bison.y"
                      { (yyval.integer) = 0; }
-#line 1915 "vhdl_bison.tab.c"
+#line 2123 "vhdl_bison.c"
     break;
 
   case 130: /* VHDL_Attr_Decimal: IDENTIFIER OF IDENTIFIER COLON ENTITY IS DECIMAL_NUMBER SEMICOLON  */
@@ -1920,7 +2128,7 @@ yyreduce:
                       set_attr_decimal (priv_data, (yyvsp[-7].str), (yyvsp[-1].integer));
                       free ((yyvsp[-5].str));
                     }
-#line 1924 "vhdl_bison.tab.c"
+#line 2132 "vhdl_bison.c"
     break;
 
   case 131: /* VHDL_Attr_Real: IDENTIFIER OF IDENTIFIER COLON SIGNAL IS LPAREN REAL_NUMBER COMMA Stop RPAREN SEMICOLON  */
@@ -1931,7 +2139,7 @@ yyreduce:
                      /* skip real attributes for the time being */
                      free ((yyvsp[-11].str)); free ((yyvsp[-9].str)); free ((yyvsp[-4].str));
                    }
-#line 1935 "vhdl_bison.tab.c"
+#line 2143 "vhdl_bison.c"
     break;
 
   case 134: /* VHDL_Attr_String: IDENTIFIER OF IDENTIFIER COLON ENTITY IS Quoted_String SEMICOLON  */
@@ -1940,13 +2148,13 @@ yyreduce:
                      set_attr_string (priv_data, (yyvsp[-7].str), strdup (priv_data->buffer));
                      free ((yyvsp[-5].str));
                    }
-#line 1944 "vhdl_bison.tab.c"
+#line 2152 "vhdl_bison.c"
     break;
 
   case 135: /* VHDL_Attr_PhysicalPinMap: IDENTIFIER OF IDENTIFIER COLON ENTITY IS PHYSICAL_PIN_MAP SEMICOLON  */
 #line 556 "vhdl_bison.y"
                            { free ((yyvsp[-7].str)); free ((yyvsp[-5].str)); }
-#line 1950 "vhdl_bison.tab.c"
+#line 2158 "vhdl_bison.c"
     break;
 
   case 136: /* Quoted_String: QUOTED_STRING  */
@@ -1956,7 +2164,7 @@ yyreduce:
                      Store_Text (priv_data, (yyvsp[0].str));
                      free ((yyvsp[0].str));
                    }
-#line 1960 "vhdl_bison.tab.c"
+#line 2168 "vhdl_bison.c"
     break;
 
   case 137: /* Quoted_String: Quoted_String CONCATENATE QUOTED_STRING  */
@@ -1965,7 +2173,7 @@ yyreduce:
                      Store_Text (priv_data, (yyvsp[0].str));
                      free ((yyvsp[0].str));
                    }
-#line 1969 "vhdl_bison.tab.c"
+#line 2177 "vhdl_bison.c"
     break;
 
   case 138: /* $@6: %empty  */
@@ -1975,7 +2183,7 @@ yyreduce:
                urj_vhdl_flex_switch_file (priv_data->scanner,
                                           priv_data->Package_File_Name);
              }
-#line 1979 "vhdl_bison.tab.c"
+#line 2187 "vhdl_bison.c"
     break;
 
   case 139: /* ISC_Use: USE ISC_Packages PERIOD ALL SEMICOLON $@6 ISC_Package  */
@@ -1983,7 +2191,7 @@ yyreduce:
              {
                priv_data->Reading_Package = 0;
              }
-#line 1987 "vhdl_bison.tab.c"
+#line 2195 "vhdl_bison.c"
     break;
 
   case 140: /* ISC_Packages: STD_1532_2001  */
@@ -1991,7 +2199,7 @@ yyreduce:
                {
                  strcpy (priv_data->Package_File_Name, "STD_1532_2001");
                }
-#line 1995 "vhdl_bison.tab.c"
+#line 2203 "vhdl_bison.c"
     break;
 
   case 141: /* ISC_Packages: STD_1532_2002  */
@@ -1999,7 +2207,7 @@ yyreduce:
                {
                  strcpy (priv_data->Package_File_Name, "STD_1532_2002");
                }
-#line 2003 "vhdl_bison.tab.c"
+#line 2211 "vhdl_bison.c"
     break;
 
   case 143: /* $@7: %empty  */
@@ -2007,11 +2215,11 @@ yyreduce:
                      {
                        priv_data->Reading_Package = 1;
                      }
-#line 2011 "vhdl_bison.tab.c"
+#line 2219 "vhdl_bison.c"
     break;
 
 
-#line 2015 "vhdl_bison.tab.c"
+#line 2223 "vhdl_bison.c"
 
       default: break;
     }
@@ -2053,7 +2261,7 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == URJ_VHDL_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -2066,17 +2274,17 @@ yyerrlab:
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= URJ_VHDL_EOF)
+      if (yychar <= YYEOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == URJ_VHDL_EOF)
+          if (yychar == YYEOF)
             YYABORT;
         }
       else
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, priv_data);
-          yychar = URJ_VHDL_EMPTY;
+          yychar = YYEMPTY;
         }
     }
 
@@ -2178,7 +2386,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != URJ_VHDL_EMPTY)
+  if (yychar != YYEMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */

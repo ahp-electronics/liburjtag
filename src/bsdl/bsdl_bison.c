@@ -63,8 +63,7 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-/* Substitute the type names.  */
-#define YYSTYPE         URJ_BSDL_STYPE
+
 /* Substitute the variable and function names.  */
 #define yyparse         urj_bsdl_parse
 #define yylex           urj_bsdl_lex
@@ -86,7 +85,7 @@
 #include "bsdl_msg.h"
 
 /* interface to flex */
-#include "bsdl_bison.tab.h"
+#include "bsdl_bison.h"
 #include "bsdl_parser.h"
 
 #ifdef DMALLOC
@@ -134,7 +133,7 @@ static void ci_append_cell_info (urj_bsdl_parser_priv_t *, int);
 
 void yyerror (urj_bsdl_parser_priv_t *, const char *);
 
-#line 138 "bsdl_bison.tab.c"
+#line 137 "bsdl_bison.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -157,7 +156,282 @@ void yyerror (urj_bsdl_parser_priv_t *, const char *);
 #  endif
 # endif
 
-#include "bsdl_bison.tab.h"
+/* Use api.header.include to #include this header
+   instead of duplicating it here.  */
+#ifndef YY_URJ_BSDL_BSDL_BISON_H_INCLUDED
+# define YY_URJ_BSDL_BSDL_BISON_H_INCLUDED
+/* Debug traces.  */
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
+#if YYDEBUG
+extern int urj_bsdl_debug;
+#endif
+
+/* Token kinds.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
+  {
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
+    CONSTANT = 258,                /* CONSTANT  */
+    PIN_MAP = 259,                 /* PIN_MAP  */
+    PHYSICAL_PIN_MAP = 260,        /* PHYSICAL_PIN_MAP  */
+    PIN_MAP_STRING = 261,          /* PIN_MAP_STRING  */
+    TAP_SCAN_IN = 262,             /* TAP_SCAN_IN  */
+    TAP_SCAN_OUT = 263,            /* TAP_SCAN_OUT  */
+    TAP_SCAN_MODE = 264,           /* TAP_SCAN_MODE  */
+    TAP_SCAN_RESET = 265,          /* TAP_SCAN_RESET  */
+    TAP_SCAN_CLOCK = 266,          /* TAP_SCAN_CLOCK  */
+    INSTRUCTION_LENGTH = 267,      /* INSTRUCTION_LENGTH  */
+    INSTRUCTION_OPCODE = 268,      /* INSTRUCTION_OPCODE  */
+    INSTRUCTION_CAPTURE = 269,     /* INSTRUCTION_CAPTURE  */
+    INSTRUCTION_DISABLE = 270,     /* INSTRUCTION_DISABLE  */
+    INSTRUCTION_GUARD = 271,       /* INSTRUCTION_GUARD  */
+    INSTRUCTION_PRIVATE = 272,     /* INSTRUCTION_PRIVATE  */
+    REGISTER_ACCESS = 273,         /* REGISTER_ACCESS  */
+    BOUNDARY_LENGTH = 274,         /* BOUNDARY_LENGTH  */
+    BOUNDARY_REGISTER = 275,       /* BOUNDARY_REGISTER  */
+    IDCODE_REGISTER = 276,         /* IDCODE_REGISTER  */
+    USERCODE_REGISTER = 277,       /* USERCODE_REGISTER  */
+    BOUNDARY = 278,                /* BOUNDARY  */
+    DEVICE_ID = 279,               /* DEVICE_ID  */
+    INPUT = 280,                   /* INPUT  */
+    OUTPUT2 = 281,                 /* OUTPUT2  */
+    OUTPUT3 = 282,                 /* OUTPUT3  */
+    CONTROL = 283,                 /* CONTROL  */
+    CONTROLR = 284,                /* CONTROLR  */
+    INTERNAL = 285,                /* INTERNAL  */
+    CLOCK = 286,                   /* CLOCK  */
+    BIDIR = 287,                   /* BIDIR  */
+    BIDIR_IN = 288,                /* BIDIR_IN  */
+    BIDIR_OUT = 289,               /* BIDIR_OUT  */
+    Z = 290,                       /* Z  */
+    WEAK0 = 291,                   /* WEAK0  */
+    WEAK1 = 292,                   /* WEAK1  */
+    IDENTIFIER = 293,              /* IDENTIFIER  */
+    PULL0 = 294,                   /* PULL0  */
+    PULL1 = 295,                   /* PULL1  */
+    KEEPER = 296,                  /* KEEPER  */
+    DECIMAL_NUMBER = 297,          /* DECIMAL_NUMBER  */
+    BINARY_PATTERN = 298,          /* BINARY_PATTERN  */
+    BIN_X_PATTERN = 299,           /* BIN_X_PATTERN  */
+    COMMA = 300,                   /* COMMA  */
+    LPAREN = 301,                  /* LPAREN  */
+    RPAREN = 302,                  /* RPAREN  */
+    LBRACKET = 303,                /* LBRACKET  */
+    RBRACKET = 304,                /* RBRACKET  */
+    COLON = 305,                   /* COLON  */
+    ASTERISK = 306,                /* ASTERISK  */
+    COMPLIANCE_PATTERNS = 307,     /* COMPLIANCE_PATTERNS  */
+    OBSERVE_ONLY = 308,            /* OBSERVE_ONLY  */
+    BYPASS = 309,                  /* BYPASS  */
+    CLAMP = 310,                   /* CLAMP  */
+    EXTEST = 311,                  /* EXTEST  */
+    HIGHZ = 312,                   /* HIGHZ  */
+    IDCODE = 313,                  /* IDCODE  */
+    INTEST = 314,                  /* INTEST  */
+    PRELOAD = 315,                 /* PRELOAD  */
+    RUNBIST = 316,                 /* RUNBIST  */
+    SAMPLE = 317,                  /* SAMPLE  */
+    USERCODE = 318,                /* USERCODE  */
+    COMPONENT_CONFORMANCE = 319,   /* COMPONENT_CONFORMANCE  */
+    STD_1149_1_1990 = 320,         /* STD_1149_1_1990  */
+    STD_1149_1_1993 = 321,         /* STD_1149_1_1993  */
+    STD_1149_1_2001 = 322,         /* STD_1149_1_2001  */
+    ISC_CONFORMANCE = 323,         /* ISC_CONFORMANCE  */
+    STD_1532_2001 = 324,           /* STD_1532_2001  */
+    STD_1532_2002 = 325,           /* STD_1532_2002  */
+    ISC_PIN_BEHAVIOR = 326,        /* ISC_PIN_BEHAVIOR  */
+    ISC_FIXED_SYSTEM_PINS = 327,   /* ISC_FIXED_SYSTEM_PINS  */
+    ISC_STATUS = 328,              /* ISC_STATUS  */
+    IMPLEMENTED = 329,             /* IMPLEMENTED  */
+    ISC_BLANK_USERCODE = 330,      /* ISC_BLANK_USERCODE  */
+    ISC_SECURITY = 331,            /* ISC_SECURITY  */
+    ISC_DISABLE_READ = 332,        /* ISC_DISABLE_READ  */
+    ISC_DISABLE_PROGRAM = 333,     /* ISC_DISABLE_PROGRAM  */
+    ISC_DISABLE_ERASE = 334,       /* ISC_DISABLE_ERASE  */
+    ISC_DISABLE_KEY = 335,         /* ISC_DISABLE_KEY  */
+    ISC_FLOW = 336,                /* ISC_FLOW  */
+    UNPROCESSED = 337,             /* UNPROCESSED  */
+    EXIT_ON_ERROR = 338,           /* EXIT_ON_ERROR  */
+    ARRAY = 339,                   /* ARRAY  */
+    SECURITY = 340,                /* SECURITY  */
+    INITIALIZE = 341,              /* INITIALIZE  */
+    REPEAT = 342,                  /* REPEAT  */
+    TERMINATE = 343,               /* TERMINATE  */
+    LOOP = 344,                    /* LOOP  */
+    MIN = 345,                     /* MIN  */
+    MAX = 346,                     /* MAX  */
+    DOLLAR = 347,                  /* DOLLAR  */
+    EQUAL = 348,                   /* EQUAL  */
+    HEX_STRING = 349,              /* HEX_STRING  */
+    WAIT = 350,                    /* WAIT  */
+    REAL_NUMBER = 351,             /* REAL_NUMBER  */
+    PLUS = 352,                    /* PLUS  */
+    MINUS = 353,                   /* MINUS  */
+    SH_RIGHT = 354,                /* SH_RIGHT  */
+    SH_LEFT = 355,                 /* SH_LEFT  */
+    TILDE = 356,                   /* TILDE  */
+    QUESTION_MARK = 357,           /* QUESTION_MARK  */
+    EXCLAMATION_MARK = 358,        /* EXCLAMATION_MARK  */
+    QUESTION_EXCLAMATION = 359,    /* QUESTION_EXCLAMATION  */
+    CRC = 360,                     /* CRC  */
+    OST = 361,                     /* OST  */
+    ISC_PROCEDURE = 362,           /* ISC_PROCEDURE  */
+    ISC_ACTION = 363,              /* ISC_ACTION  */
+    PROPRIETARY = 364,             /* PROPRIETARY  */
+    OPTIONAL = 365,                /* OPTIONAL  */
+    RECOMMENDED = 366,             /* RECOMMENDED  */
+    ISC_ILLEGAL_EXIT = 367,        /* ISC_ILLEGAL_EXIT  */
+    ILLEGAL = 368                  /* ILLEGAL  */
+  };
+  typedef enum yytokentype yytoken_kind_t;
+#endif
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
+#define CONSTANT 258
+#define PIN_MAP 259
+#define PHYSICAL_PIN_MAP 260
+#define PIN_MAP_STRING 261
+#define TAP_SCAN_IN 262
+#define TAP_SCAN_OUT 263
+#define TAP_SCAN_MODE 264
+#define TAP_SCAN_RESET 265
+#define TAP_SCAN_CLOCK 266
+#define INSTRUCTION_LENGTH 267
+#define INSTRUCTION_OPCODE 268
+#define INSTRUCTION_CAPTURE 269
+#define INSTRUCTION_DISABLE 270
+#define INSTRUCTION_GUARD 271
+#define INSTRUCTION_PRIVATE 272
+#define REGISTER_ACCESS 273
+#define BOUNDARY_LENGTH 274
+#define BOUNDARY_REGISTER 275
+#define IDCODE_REGISTER 276
+#define USERCODE_REGISTER 277
+#define BOUNDARY 278
+#define DEVICE_ID 279
+#define INPUT 280
+#define OUTPUT2 281
+#define OUTPUT3 282
+#define CONTROL 283
+#define CONTROLR 284
+#define INTERNAL 285
+#define CLOCK 286
+#define BIDIR 287
+#define BIDIR_IN 288
+#define BIDIR_OUT 289
+#define Z 290
+#define WEAK0 291
+#define WEAK1 292
+#define IDENTIFIER 293
+#define PULL0 294
+#define PULL1 295
+#define KEEPER 296
+#define DECIMAL_NUMBER 297
+#define BINARY_PATTERN 298
+#define BIN_X_PATTERN 299
+#define COMMA 300
+#define LPAREN 301
+#define RPAREN 302
+#define LBRACKET 303
+#define RBRACKET 304
+#define COLON 305
+#define ASTERISK 306
+#define COMPLIANCE_PATTERNS 307
+#define OBSERVE_ONLY 308
+#define BYPASS 309
+#define CLAMP 310
+#define EXTEST 311
+#define HIGHZ 312
+#define IDCODE 313
+#define INTEST 314
+#define PRELOAD 315
+#define RUNBIST 316
+#define SAMPLE 317
+#define USERCODE 318
+#define COMPONENT_CONFORMANCE 319
+#define STD_1149_1_1990 320
+#define STD_1149_1_1993 321
+#define STD_1149_1_2001 322
+#define ISC_CONFORMANCE 323
+#define STD_1532_2001 324
+#define STD_1532_2002 325
+#define ISC_PIN_BEHAVIOR 326
+#define ISC_FIXED_SYSTEM_PINS 327
+#define ISC_STATUS 328
+#define IMPLEMENTED 329
+#define ISC_BLANK_USERCODE 330
+#define ISC_SECURITY 331
+#define ISC_DISABLE_READ 332
+#define ISC_DISABLE_PROGRAM 333
+#define ISC_DISABLE_ERASE 334
+#define ISC_DISABLE_KEY 335
+#define ISC_FLOW 336
+#define UNPROCESSED 337
+#define EXIT_ON_ERROR 338
+#define ARRAY 339
+#define SECURITY 340
+#define INITIALIZE 341
+#define REPEAT 342
+#define TERMINATE 343
+#define LOOP 344
+#define MIN 345
+#define MAX 346
+#define DOLLAR 347
+#define EQUAL 348
+#define HEX_STRING 349
+#define WAIT 350
+#define REAL_NUMBER 351
+#define PLUS 352
+#define MINUS 353
+#define SH_RIGHT 354
+#define SH_LEFT 355
+#define TILDE 356
+#define QUESTION_MARK 357
+#define EXCLAMATION_MARK 358
+#define QUESTION_EXCLAMATION 359
+#define CRC 360
+#define OST 361
+#define ISC_PROCEDURE 362
+#define ISC_ACTION 363
+#define PROPRIETARY 364
+#define OPTIONAL 365
+#define RECOMMENDED 366
+#define ISC_ILLEGAL_EXIT 367
+#define ILLEGAL 368
+
+/* Value type.  */
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
+{
+#line 188 "bsdl_bison.y"
+
+  int   integer;
+  char *str;
+
+#line 421 "bsdl_bison.c"
+
+};
+typedef union YYSTYPE YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
+
+
+
+
+int urj_bsdl_parse (urj_bsdl_parser_priv_t *priv_data);
+
+
+#endif /* !YY_URJ_BSDL_BSDL_BISON_H_INCLUDED  */
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -666,7 +940,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined URJ_BSDL_STYPE_IS_TRIVIAL && URJ_BSDL_STYPE_IS_TRIVIAL)))
+         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -792,7 +1066,7 @@ static const yytype_int8 yytranslate[] =
      105,   106,   107,   108,   109,   110,   111,   112,   113
 };
 
-#if URJ_BSDL_DEBUG
+#if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
@@ -831,7 +1105,7 @@ static const yytype_int16 yyrline[] =
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if URJ_BSDL_DEBUG || 0
+#if YYDEBUG || 0
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -1278,7 +1552,7 @@ static const yytype_int8 yyr2[] =
 enum { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = URJ_BSDL_EMPTY)
+#define yyclearin       (yychar = YYEMPTY)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -1290,7 +1564,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == URJ_BSDL_EMPTY)                                        \
+    if (yychar == YYEMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -1306,12 +1580,12 @@ enum { YYENOMEM = -2 };
   while (0)
 
 /* Backward compatibility with an undocumented macro.
-   Use URJ_BSDL_error or URJ_BSDL_UNDEF. */
-#define YYERRCODE URJ_BSDL_UNDEF
+   Use YYerror or YYUNDEF. */
+#define YYERRCODE YYUNDEF
 
 
 /* Enable debugging if requested.  */
-#if URJ_BSDL_DEBUG
+#if YYDEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -1430,12 +1704,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !URJ_BSDL_DEBUG */
+#else /* !YYDEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !URJ_BSDL_DEBUG */
+#endif /* !YYDEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -1542,7 +1816,7 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = URJ_BSDL_EMPTY; /* Cause a token to be read.  */
+  yychar = YYEMPTY; /* Cause a token to be read.  */
 
   goto yysetstate;
 
@@ -1652,25 +1926,25 @@ yybackup:
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == URJ_BSDL_EMPTY)
+  if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, HACK);
     }
 
-  if (yychar <= URJ_BSDL_EOF)
+  if (yychar <= YYEOF)
     {
-      yychar = URJ_BSDL_EOF;
+      yychar = YYEOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == URJ_BSDL_error)
+  else if (yychar == YYerror)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
          lookahead, it is too special and may lead us to an endless
          loop in error recovery. */
-      yychar = URJ_BSDL_UNDEF;
+      yychar = YYUNDEF;
       yytoken = YYSYMBOL_YYerror;
       goto yyerrlab1;
     }
@@ -1707,7 +1981,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   /* Discard the shifted token.  */
-  yychar = URJ_BSDL_EMPTY;
+  yychar = YYEMPTY;
   goto yynewstate;
 
 
@@ -1749,31 +2023,31 @@ yyreduce:
                      BUMP_ERROR;
                      YYABORT;
                    }
-#line 1753 "bsdl_bison.tab.c"
+#line 2027 "bsdl_bison.c"
     break;
 
   case 27: /* Pin_Mapping: IDENTIFIER COLON Physical_Pin_Desc  */
 #line 285 "bsdl_bison.y"
                     { free ((yyvsp[-2].str)); }
-#line 1759 "bsdl_bison.tab.c"
+#line 2033 "bsdl_bison.c"
     break;
 
   case 32: /* Physical_Pin: IDENTIFIER  */
 #line 294 "bsdl_bison.y"
                     { free ((yyvsp[0].str)); }
-#line 1765 "bsdl_bison.tab.c"
+#line 2039 "bsdl_bison.c"
     break;
 
   case 33: /* Physical_Pin: IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN  */
 #line 296 "bsdl_bison.y"
                     { free ((yyvsp[-3].str)); }
-#line 1771 "bsdl_bison.tab.c"
+#line 2045 "bsdl_bison.c"
     break;
 
   case 40: /* BSDL_Inst_Length: INSTRUCTION_LENGTH DECIMAL_NUMBER  */
 #line 322 "bsdl_bison.y"
                    { priv_data->jtag_ctrl->instr_len = (yyvsp[0].integer); }
-#line 1777 "bsdl_bison.tab.c"
+#line 2051 "bsdl_bison.c"
     break;
 
   case 44: /* BSDL_Opcode_Table: error  */
@@ -1784,19 +2058,19 @@ yyreduce:
                         BUMP_ERROR;
                         YYABORT;
                       }
-#line 1788 "bsdl_bison.tab.c"
+#line 2062 "bsdl_bison.c"
     break;
 
   case 45: /* Opcode_Desc: IDENTIFIER LPAREN Binary_Pattern_List RPAREN  */
 #line 339 "bsdl_bison.y"
                       { add_instruction (priv_data, (yyvsp[-3].str), (yyvsp[-1].str)); }
-#line 1794 "bsdl_bison.tab.c"
+#line 2068 "bsdl_bison.c"
     break;
 
   case 46: /* Binary_Pattern_List: Binary_Pattern  */
 #line 342 "bsdl_bison.y"
                       { (yyval.str) = (yyvsp[0].str); }
-#line 1800 "bsdl_bison.tab.c"
+#line 2074 "bsdl_bison.c"
     break;
 
   case 47: /* Binary_Pattern_List: Binary_Pattern_List COMMA Binary_Pattern  */
@@ -1807,31 +2081,31 @@ yyreduce:
                         (yyval.str) = (yyvsp[-2].str);
                         free ((yyvsp[0].str));
                       }
-#line 1811 "bsdl_bison.tab.c"
+#line 2085 "bsdl_bison.c"
     break;
 
   case 48: /* Binary_Pattern: BINARY_PATTERN  */
 #line 352 "bsdl_bison.y"
                       { (yyval.str) = (yyvsp[0].str); }
-#line 1817 "bsdl_bison.tab.c"
+#line 2091 "bsdl_bison.c"
     break;
 
   case 49: /* BSDL_Inst_Capture: INSTRUCTION_CAPTURE BIN_X_PATTERN  */
 #line 357 "bsdl_bison.y"
                     { free ((yyvsp[0].str)); }
-#line 1823 "bsdl_bison.tab.c"
+#line 2097 "bsdl_bison.c"
     break;
 
   case 50: /* BSDL_Inst_Disable: INSTRUCTION_DISABLE IDENTIFIER  */
 #line 362 "bsdl_bison.y"
                     { free ((yyvsp[0].str)); }
-#line 1829 "bsdl_bison.tab.c"
+#line 2103 "bsdl_bison.c"
     break;
 
   case 51: /* BSDL_Inst_Guard: INSTRUCTION_GUARD IDENTIFIER  */
 #line 367 "bsdl_bison.y"
                   { free ((yyvsp[0].str)); }
-#line 1835 "bsdl_bison.tab.c"
+#line 2109 "bsdl_bison.c"
     break;
 
   case 55: /* Private_Opcode_List: error  */
@@ -1841,170 +2115,170 @@ yyreduce:
                         BUMP_ERROR;
                         YYABORT;
                       }
-#line 1845 "bsdl_bison.tab.c"
+#line 2119 "bsdl_bison.c"
     break;
 
   case 56: /* Private_Opcode: IDENTIFIER  */
 #line 383 "bsdl_bison.y"
                       { free ((yyvsp[0].str)); }
-#line 1851 "bsdl_bison.tab.c"
+#line 2125 "bsdl_bison.c"
     break;
 
   case 57: /* BSDL_Idcode_Register: IDCODE_REGISTER BIN_X_PATTERN  */
 #line 388 "bsdl_bison.y"
                        { priv_data->jtag_ctrl->idcode = (yyvsp[0].str); }
-#line 1857 "bsdl_bison.tab.c"
+#line 2131 "bsdl_bison.c"
     break;
 
   case 58: /* BSDL_Usercode_Register: USERCODE_REGISTER BIN_X_PATTERN  */
 #line 393 "bsdl_bison.y"
                          { priv_data->jtag_ctrl->usercode = (yyvsp[0].str); }
-#line 1863 "bsdl_bison.tab.c"
+#line 2137 "bsdl_bison.c"
     break;
 
   case 62: /* Register_Assoc: Register_Decl LPAREN Reg_Opcode_List RPAREN  */
 #line 403 "bsdl_bison.y"
                        { ac_apply_assoc (priv_data); }
-#line 1869 "bsdl_bison.tab.c"
+#line 2143 "bsdl_bison.c"
     break;
 
   case 63: /* Register_Decl: Standard_Reg  */
 #line 406 "bsdl_bison.y"
                        { ac_set_register (priv_data, (yyvsp[0].str), 0); }
-#line 1875 "bsdl_bison.tab.c"
+#line 2149 "bsdl_bison.c"
     break;
 
   case 64: /* Register_Decl: IDENTIFIER LBRACKET DECIMAL_NUMBER RBRACKET  */
 #line 408 "bsdl_bison.y"
                        { ac_set_register (priv_data, (yyvsp[-3].str), (yyvsp[-1].integer)); }
-#line 1881 "bsdl_bison.tab.c"
+#line 2155 "bsdl_bison.c"
     break;
 
   case 65: /* Standard_Reg: BOUNDARY  */
 #line 411 "bsdl_bison.y"
                        { (yyval.str) = strdup ("BOUNDARY"); }
-#line 1887 "bsdl_bison.tab.c"
+#line 2161 "bsdl_bison.c"
     break;
 
   case 66: /* Standard_Reg: BYPASS  */
 #line 413 "bsdl_bison.y"
                        { (yyval.str) = strdup ("BYPASS"); }
-#line 1893 "bsdl_bison.tab.c"
+#line 2167 "bsdl_bison.c"
     break;
 
   case 67: /* Standard_Reg: IDCODE  */
 #line 415 "bsdl_bison.y"
                        { (yyval.str) = strdup ("IDCODE"); }
-#line 1899 "bsdl_bison.tab.c"
+#line 2173 "bsdl_bison.c"
     break;
 
   case 68: /* Standard_Reg: USERCODE  */
 #line 417 "bsdl_bison.y"
                        { (yyval.str) = strdup ("USERCODE"); }
-#line 1905 "bsdl_bison.tab.c"
+#line 2179 "bsdl_bison.c"
     break;
 
   case 69: /* Standard_Reg: DEVICE_ID  */
 #line 419 "bsdl_bison.y"
                        { (yyval.str) = strdup ("DEVICE_ID"); }
-#line 1911 "bsdl_bison.tab.c"
+#line 2185 "bsdl_bison.c"
     break;
 
   case 72: /* Instruction_Name: BYPASS  */
 #line 425 "bsdl_bison.y"
                        { (yyval.str) = strdup ("BYPASS"); }
-#line 1917 "bsdl_bison.tab.c"
+#line 2191 "bsdl_bison.c"
     break;
 
   case 73: /* Instruction_Name: CLAMP  */
 #line 427 "bsdl_bison.y"
                        { (yyval.str) = strdup ("CLAMP"); }
-#line 1923 "bsdl_bison.tab.c"
+#line 2197 "bsdl_bison.c"
     break;
 
   case 74: /* Instruction_Name: EXTEST  */
 #line 429 "bsdl_bison.y"
                        { (yyval.str) = strdup ("EXTEST"); }
-#line 1929 "bsdl_bison.tab.c"
+#line 2203 "bsdl_bison.c"
     break;
 
   case 75: /* Instruction_Name: HIGHZ  */
 #line 431 "bsdl_bison.y"
                        { (yyval.str) = strdup ("HIGHZ"); }
-#line 1935 "bsdl_bison.tab.c"
+#line 2209 "bsdl_bison.c"
     break;
 
   case 76: /* Instruction_Name: IDCODE  */
 #line 433 "bsdl_bison.y"
                        { (yyval.str) = strdup ("IDCODE"); }
-#line 1941 "bsdl_bison.tab.c"
+#line 2215 "bsdl_bison.c"
     break;
 
   case 77: /* Instruction_Name: INTEST  */
 #line 435 "bsdl_bison.y"
                        { (yyval.str) = strdup ("INTEST"); }
-#line 1947 "bsdl_bison.tab.c"
+#line 2221 "bsdl_bison.c"
     break;
 
   case 78: /* Instruction_Name: PRELOAD  */
 #line 437 "bsdl_bison.y"
                        { (yyval.str) = strdup ("PRELOAD"); }
-#line 1953 "bsdl_bison.tab.c"
+#line 2227 "bsdl_bison.c"
     break;
 
   case 79: /* Instruction_Name: RUNBIST  */
 #line 439 "bsdl_bison.y"
                        { (yyval.str) = strdup ("RUNBIST"); }
-#line 1959 "bsdl_bison.tab.c"
+#line 2233 "bsdl_bison.c"
     break;
 
   case 80: /* Instruction_Name: SAMPLE  */
 #line 441 "bsdl_bison.y"
                        { (yyval.str) = strdup ("SAMPLE"); }
-#line 1965 "bsdl_bison.tab.c"
+#line 2239 "bsdl_bison.c"
     break;
 
   case 81: /* Instruction_Name: USERCODE  */
 #line 443 "bsdl_bison.y"
                        { (yyval.str) = strdup ("USERCODE"); }
-#line 1971 "bsdl_bison.tab.c"
+#line 2245 "bsdl_bison.c"
     break;
 
   case 82: /* Instruction_Name: IDENTIFIER  */
 #line 445 "bsdl_bison.y"
                        { (yyval.str) = (yyvsp[0].str); }
-#line 1977 "bsdl_bison.tab.c"
+#line 2251 "bsdl_bison.c"
     break;
 
   case 83: /* Reg_Opcode: Instruction_Name  */
 #line 448 "bsdl_bison.y"
                        { ac_add_instruction (priv_data, (yyvsp[0].str)); }
-#line 1983 "bsdl_bison.tab.c"
+#line 2257 "bsdl_bison.c"
     break;
 
   case 84: /* BSDL_Boundary_Length: BOUNDARY_LENGTH DECIMAL_NUMBER  */
 #line 454 "bsdl_bison.y"
                        { priv_data->jtag_ctrl->bsr_len = (yyvsp[0].integer); }
-#line 1989 "bsdl_bison.tab.c"
+#line 2263 "bsdl_bison.c"
     break;
 
   case 88: /* BSDL_Cell_Table: error  */
 #line 463 "bsdl_bison.y"
                   {Print_Error (priv_data, _("Error in Boundary Cell description"));
                    BUMP_ERROR; YYABORT; }
-#line 1996 "bsdl_bison.tab.c"
+#line 2270 "bsdl_bison.c"
     break;
 
   case 89: /* Cell_Entry: DECIMAL_NUMBER LPAREN Cell_Info RPAREN  */
 #line 467 "bsdl_bison.y"
                   { ci_append_cell_info (priv_data, (yyvsp[-3].integer)); }
-#line 2002 "bsdl_bison.tab.c"
+#line 2276 "bsdl_bison.c"
     break;
 
   case 90: /* Cell_Info: Cell_Spec  */
 #line 470 "bsdl_bison.y"
                   { ci_no_disable (priv_data); }
-#line 2008 "bsdl_bison.tab.c"
+#line 2282 "bsdl_bison.c"
     break;
 
   case 92: /* Cell_Spec: IDENTIFIER COMMA Port_Name COMMA Cell_Function COMMA Safe_Value  */
@@ -2013,7 +2287,7 @@ yyreduce:
                     free ((yyvsp[-6].str));
                     ci_set_cell_spec (priv_data, (yyvsp[-2].integer), (yyvsp[0].str));
                   }
-#line 2017 "bsdl_bison.tab.c"
+#line 2291 "bsdl_bison.c"
     break;
 
   case 93: /* Port_Name: IDENTIFIER  */
@@ -2022,7 +2296,7 @@ yyreduce:
                     prt_add_name (priv_data, (yyvsp[0].str));
                     prt_add_bit (priv_data);
                   }
-#line 2026 "bsdl_bison.tab.c"
+#line 2300 "bsdl_bison.c"
     break;
 
   case 94: /* Port_Name: IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN  */
@@ -2031,7 +2305,7 @@ yyreduce:
                     prt_add_name (priv_data, (yyvsp[-3].str));
                     prt_add_range (priv_data, (yyvsp[-1].integer), (yyvsp[-1].integer));
                   }
-#line 2035 "bsdl_bison.tab.c"
+#line 2309 "bsdl_bison.c"
     break;
 
   case 95: /* Port_Name: ASTERISK  */
@@ -2040,67 +2314,67 @@ yyreduce:
                     prt_add_name (priv_data, strdup ("*"));
                     prt_add_bit (priv_data);
                   }
-#line 2044 "bsdl_bison.tab.c"
+#line 2318 "bsdl_bison.c"
     break;
 
   case 96: /* Cell_Function: INPUT  */
 #line 497 "bsdl_bison.y"
                   { (yyval.integer) = INPUT; }
-#line 2050 "bsdl_bison.tab.c"
+#line 2324 "bsdl_bison.c"
     break;
 
   case 97: /* Cell_Function: OUTPUT2  */
 #line 499 "bsdl_bison.y"
                   { (yyval.integer) = OUTPUT2; }
-#line 2056 "bsdl_bison.tab.c"
+#line 2330 "bsdl_bison.c"
     break;
 
   case 98: /* Cell_Function: OUTPUT3  */
 #line 501 "bsdl_bison.y"
                   { (yyval.integer) = OUTPUT3; }
-#line 2062 "bsdl_bison.tab.c"
+#line 2336 "bsdl_bison.c"
     break;
 
   case 99: /* Cell_Function: CONTROL  */
 #line 503 "bsdl_bison.y"
                   { (yyval.integer) = CONTROL; }
-#line 2068 "bsdl_bison.tab.c"
+#line 2342 "bsdl_bison.c"
     break;
 
   case 100: /* Cell_Function: CONTROLR  */
 #line 505 "bsdl_bison.y"
                   { (yyval.integer) = CONTROLR; }
-#line 2074 "bsdl_bison.tab.c"
+#line 2348 "bsdl_bison.c"
     break;
 
   case 101: /* Cell_Function: INTERNAL  */
 #line 507 "bsdl_bison.y"
                   { (yyval.integer) = INTERNAL; }
-#line 2080 "bsdl_bison.tab.c"
+#line 2354 "bsdl_bison.c"
     break;
 
   case 102: /* Cell_Function: CLOCK  */
 #line 509 "bsdl_bison.y"
                   { (yyval.integer) = CLOCK; }
-#line 2086 "bsdl_bison.tab.c"
+#line 2360 "bsdl_bison.c"
     break;
 
   case 103: /* Cell_Function: BIDIR  */
 #line 511 "bsdl_bison.y"
                   { (yyval.integer) = BIDIR; }
-#line 2092 "bsdl_bison.tab.c"
+#line 2366 "bsdl_bison.c"
     break;
 
   case 104: /* Cell_Function: OBSERVE_ONLY  */
 #line 513 "bsdl_bison.y"
                   { (yyval.integer) = OBSERVE_ONLY; }
-#line 2098 "bsdl_bison.tab.c"
+#line 2372 "bsdl_bison.c"
     break;
 
   case 105: /* Safe_Value: IDENTIFIER  */
 #line 516 "bsdl_bison.y"
                   { (yyval.str) = (yyvsp[0].str); }
-#line 2104 "bsdl_bison.tab.c"
+#line 2378 "bsdl_bison.c"
     break;
 
   case 106: /* Safe_Value: DECIMAL_NUMBER  */
@@ -2113,85 +2387,85 @@ yyreduce:
                     tmp[1] = '\0';
                     (yyval.str) = tmp;
                   }
-#line 2117 "bsdl_bison.tab.c"
+#line 2391 "bsdl_bison.c"
     break;
 
   case 107: /* Disable_Spec: DECIMAL_NUMBER COMMA DECIMAL_NUMBER COMMA Disable_Value  */
 #line 528 "bsdl_bison.y"
                   { ci_set_cell_spec_disable (priv_data, (yyvsp[-4].integer), (yyvsp[-2].integer), (yyvsp[0].integer)); }
-#line 2123 "bsdl_bison.tab.c"
+#line 2397 "bsdl_bison.c"
     break;
 
   case 108: /* Disable_Value: Z  */
 #line 531 "bsdl_bison.y"
                   { (yyval.integer) = Z; }
-#line 2129 "bsdl_bison.tab.c"
+#line 2403 "bsdl_bison.c"
     break;
 
   case 109: /* Disable_Value: WEAK0  */
 #line 533 "bsdl_bison.y"
                   { (yyval.integer) = WEAK0; }
-#line 2135 "bsdl_bison.tab.c"
+#line 2409 "bsdl_bison.c"
     break;
 
   case 110: /* Disable_Value: WEAK1  */
 #line 535 "bsdl_bison.y"
                   { (yyval.integer) = WEAK1; }
-#line 2141 "bsdl_bison.tab.c"
+#line 2415 "bsdl_bison.c"
     break;
 
   case 111: /* Disable_Value: PULL0  */
 #line 537 "bsdl_bison.y"
                   { (yyval.integer) = PULL0; }
-#line 2147 "bsdl_bison.tab.c"
+#line 2421 "bsdl_bison.c"
     break;
 
   case 112: /* Disable_Value: PULL1  */
 #line 539 "bsdl_bison.y"
                   { (yyval.integer) = PULL1; }
-#line 2153 "bsdl_bison.tab.c"
+#line 2427 "bsdl_bison.c"
     break;
 
   case 113: /* Disable_Value: KEEPER  */
 #line 541 "bsdl_bison.y"
                   { (yyval.integer) = KEEPER; }
-#line 2159 "bsdl_bison.tab.c"
+#line 2433 "bsdl_bison.c"
     break;
 
   case 115: /* $@1: %empty  */
 #line 548 "bsdl_bison.y"
                           { urj_bsdl_flex_set_bin_x (priv_data->scanner); }
-#line 2165 "bsdl_bison.tab.c"
+#line 2439 "bsdl_bison.c"
     break;
 
   case 117: /* Bin_X_Pattern_List: BIN_X_PATTERN  */
 #line 552 "bsdl_bison.y"
                      { free ((yyvsp[0].str)); }
-#line 2171 "bsdl_bison.tab.c"
+#line 2445 "bsdl_bison.c"
     break;
 
   case 118: /* Bin_X_Pattern_List: Bin_X_Pattern_List COMMA BIN_X_PATTERN  */
 #line 554 "bsdl_bison.y"
                      { free ((yyvsp[0].str)); }
-#line 2177 "bsdl_bison.tab.c"
+#line 2451 "bsdl_bison.c"
     break;
 
   case 119: /* BSDL_Component_Conformance: COMPONENT_CONFORMANCE STD_1149_1_1990  */
 #line 559 "bsdl_bison.y"
                              { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_1990; }
-#line 2183 "bsdl_bison.tab.c"
+#line 2457 "bsdl_bison.c"
     break;
 
   case 120: /* BSDL_Component_Conformance: COMPONENT_CONFORMANCE STD_1149_1_1993  */
 #line 561 "bsdl_bison.y"
                              { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_1993; }
-#line 2189 "bsdl_bison.tab.c"
+#line 2463 "bsdl_bison.c"
     break;
 
   case 121: /* BSDL_Component_Conformance: COMPONENT_CONFORMANCE STD_1149_1_2001  */
 #line 563 "bsdl_bison.y"
                              { priv_data->jtag_ctrl->conformance = URJ_BSDL_CONF_2001; }
-#line 2195 "bsdl_bison.tab.c"
+#line 2469 "bsdl_bison.c"
     break;
 
   case 137: /* Pin_Behavior_Option: error  */
@@ -2201,7 +2475,7 @@ yyreduce:
                         BUMP_ERROR;
                         YYABORT;
                       }
-#line 2205 "bsdl_bison.tab.c"
+#line 2479 "bsdl_bison.c"
     break;
 
   case 141: /* Fixed_Pin_List: error  */
@@ -2211,31 +2485,31 @@ yyreduce:
                           BUMP_ERROR;
                           YYABORT;
                         }
-#line 2215 "bsdl_bison.tab.c"
+#line 2489 "bsdl_bison.c"
     break;
 
   case 142: /* Port_Id: IDENTIFIER  */
 #line 606 "bsdl_bison.y"
                         { free ((yyvsp[0].str)); }
-#line 2221 "bsdl_bison.tab.c"
+#line 2495 "bsdl_bison.c"
     break;
 
   case 143: /* Port_Id: IDENTIFIER LPAREN DECIMAL_NUMBER RPAREN  */
 #line 608 "bsdl_bison.y"
                         { free ((yyvsp[-3].str)); }
-#line 2227 "bsdl_bison.tab.c"
+#line 2501 "bsdl_bison.c"
     break;
 
   case 146: /* Status_Modifier: IDENTIFIER  */
 #line 615 "bsdl_bison.y"
                   { free ((yyvsp[0].str)); }
-#line 2233 "bsdl_bison.tab.c"
+#line 2507 "bsdl_bison.c"
     break;
 
   case 147: /* ISC_Blank_Usercode: ISC_BLANK_USERCODE BIN_X_PATTERN  */
 #line 619 "bsdl_bison.y"
                      { free ((yyvsp[0].str)); }
-#line 2239 "bsdl_bison.tab.c"
+#line 2513 "bsdl_bison.c"
     break;
 
   case 150: /* Protection_Spec: error  */
@@ -2245,7 +2519,7 @@ yyreduce:
                     BUMP_ERROR;
                     YYABORT;
                   }
-#line 2249 "bsdl_bison.tab.c"
+#line 2523 "bsdl_bison.c"
     break;
 
   case 169: /* Flow_Definition: error  */
@@ -2255,103 +2529,103 @@ yyreduce:
                            BUMP_ERROR;
                            YYABORT;
                          }
-#line 2259 "bsdl_bison.tab.c"
+#line 2533 "bsdl_bison.c"
     break;
 
   case 170: /* Flow_Descriptor: IDENTIFIER  */
 #line 667 "bsdl_bison.y"
                          { free ((yyvsp[0].str)); }
-#line 2265 "bsdl_bison.tab.c"
+#line 2539 "bsdl_bison.c"
     break;
 
   case 171: /* Flow_Descriptor: IDENTIFIER Data_Name  */
 #line 669 "bsdl_bison.y"
                          { free ((yyvsp[-1].str)); }
-#line 2271 "bsdl_bison.tab.c"
+#line 2545 "bsdl_bison.c"
     break;
 
   case 172: /* Flow_Descriptor: IDENTIFIER Data_Name UNPROCESSED  */
 #line 671 "bsdl_bison.y"
                          { free ((yyvsp[-2].str)); }
-#line 2277 "bsdl_bison.tab.c"
+#line 2551 "bsdl_bison.c"
     break;
 
   case 173: /* Flow_Descriptor: IDENTIFIER Data_Name UNPROCESSED EXIT_ON_ERROR  */
 #line 673 "bsdl_bison.y"
                          { free ((yyvsp[-3].str)); }
-#line 2283 "bsdl_bison.tab.c"
+#line 2557 "bsdl_bison.c"
     break;
 
   case 174: /* Flow_Descriptor: IDENTIFIER UNPROCESSED  */
 #line 675 "bsdl_bison.y"
                          { free ((yyvsp[-1].str)); }
-#line 2289 "bsdl_bison.tab.c"
+#line 2563 "bsdl_bison.c"
     break;
 
   case 175: /* Flow_Descriptor: IDENTIFIER UNPROCESSED EXIT_ON_ERROR  */
 #line 677 "bsdl_bison.y"
                          { free ((yyvsp[-2].str)); }
-#line 2295 "bsdl_bison.tab.c"
+#line 2569 "bsdl_bison.c"
     break;
 
   case 176: /* Flow_Descriptor: IDENTIFIER EXIT_ON_ERROR  */
 #line 679 "bsdl_bison.y"
                          { free ((yyvsp[-1].str)); }
-#line 2301 "bsdl_bison.tab.c"
+#line 2575 "bsdl_bison.c"
     break;
 
   case 178: /* Data_Name: LPAREN IDENTIFIER RPAREN  */
 #line 683 "bsdl_bison.y"
                          { free ((yyvsp[-1].str)); }
-#line 2307 "bsdl_bison.tab.c"
+#line 2581 "bsdl_bison.c"
     break;
 
   case 197: /* Activity: LPAREN Instruction_Name Wait_Specification RPAREN  */
 #line 710 "bsdl_bison.y"
                          { free ((yyvsp[-2].str)); }
-#line 2313 "bsdl_bison.tab.c"
+#line 2587 "bsdl_bison.c"
     break;
 
   case 198: /* Activity: LPAREN Instruction_Name Update_Field_List Wait_Specification RPAREN  */
 #line 712 "bsdl_bison.y"
                          { free ((yyvsp[-3].str)); }
-#line 2319 "bsdl_bison.tab.c"
+#line 2593 "bsdl_bison.c"
     break;
 
   case 199: /* Activity: LPAREN Instruction_Name Wait_Specification Capture_Field_List RPAREN  */
 #line 714 "bsdl_bison.y"
                          { free ((yyvsp[-3].str)); }
-#line 2325 "bsdl_bison.tab.c"
+#line 2599 "bsdl_bison.c"
     break;
 
   case 200: /* Activity: LPAREN Instruction_Name Update_Field_List Wait_Specification Capture_Field_List RPAREN  */
 #line 716 "bsdl_bison.y"
                          { free ((yyvsp[-4].str)); }
-#line 2331 "bsdl_bison.tab.c"
+#line 2605 "bsdl_bison.c"
     break;
 
   case 204: /* $@2: %empty  */
 #line 723 "bsdl_bison.y"
                          { urj_bsdl_flex_set_hex (priv_data->scanner); }
-#line 2337 "bsdl_bison.tab.c"
+#line 2611 "bsdl_bison.c"
     break;
 
   case 205: /* Update_Field: DECIMAL_NUMBER COLON $@2 Data_Expression  */
 #line 725 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2343 "bsdl_bison.tab.c"
+#line 2617 "bsdl_bison.c"
     break;
 
   case 206: /* Data_Expression: HEX_STRING  */
 #line 728 "bsdl_bison.y"
                          { free ((yyvsp[0].str)); }
-#line 2349 "bsdl_bison.tab.c"
+#line 2623 "bsdl_bison.c"
     break;
 
   case 212: /* $@3: %empty  */
 #line 737 "bsdl_bison.y"
                          { urj_bsdl_flex_set_hex (priv_data->scanner); }
-#line 2355 "bsdl_bison.tab.c"
+#line 2629 "bsdl_bison.c"
     break;
 
   case 213: /* Variable_Assignment: Variable EQUAL $@3 HEX_STRING  */
@@ -2360,73 +2634,73 @@ yyreduce:
                            free ((yyvsp[0].str));
                            urj_bsdl_flex_set_decimal (priv_data->scanner);
                          }
-#line 2364 "bsdl_bison.tab.c"
+#line 2638 "bsdl_bison.c"
     break;
 
   case 221: /* $@4: %empty  */
 #line 755 "bsdl_bison.y"
                          { urj_bsdl_flex_set_hex (priv_data->scanner); }
-#line 2370 "bsdl_bison.tab.c"
+#line 2644 "bsdl_bison.c"
     break;
 
   case 222: /* Capture_Field: DECIMAL_NUMBER COLON $@4 Capture_Field_Rest  */
 #line 757 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2376 "bsdl_bison.tab.c"
+#line 2650 "bsdl_bison.c"
     break;
 
   case 241: /* Duration_Specification: REAL_NUMBER  */
 #line 783 "bsdl_bison.y"
                          { free ((yyvsp[0].str)); }
-#line 2382 "bsdl_bison.tab.c"
+#line 2656 "bsdl_bison.c"
     break;
 
   case 242: /* Duration_Specification: Clock_Cycles COMMA REAL_NUMBER  */
 #line 785 "bsdl_bison.y"
                          { free ((yyvsp[0].str)); }
-#line 2388 "bsdl_bison.tab.c"
+#line 2662 "bsdl_bison.c"
     break;
 
   case 244: /* Variable: DOLLAR IDENTIFIER  */
 #line 790 "bsdl_bison.y"
                          { free ((yyvsp[0].str)); }
-#line 2394 "bsdl_bison.tab.c"
+#line 2668 "bsdl_bison.c"
     break;
 
   case 245: /* Binary_Operator: PLUS  */
 #line 793 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2400 "bsdl_bison.tab.c"
+#line 2674 "bsdl_bison.c"
     break;
 
   case 246: /* Binary_Operator: MINUS  */
 #line 795 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2406 "bsdl_bison.tab.c"
+#line 2680 "bsdl_bison.c"
     break;
 
   case 247: /* Binary_Operator: SH_RIGHT  */
 #line 797 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2412 "bsdl_bison.tab.c"
+#line 2686 "bsdl_bison.c"
     break;
 
   case 248: /* Binary_Operator: SH_LEFT  */
 #line 799 "bsdl_bison.y"
                          { urj_bsdl_flex_set_decimal (priv_data->scanner); }
-#line 2418 "bsdl_bison.tab.c"
+#line 2692 "bsdl_bison.c"
     break;
 
   case 258: /* Procedure: IDENTIFIER EQUAL LPAREN Flow_Descriptor_List RPAREN  */
 #line 820 "bsdl_bison.y"
                        { free ((yyvsp[-4].str)); }
-#line 2424 "bsdl_bison.tab.c"
+#line 2698 "bsdl_bison.c"
     break;
 
   case 259: /* Procedure: IDENTIFIER Data_Name EQUAL LPAREN Flow_Descriptor_List RPAREN  */
 #line 822 "bsdl_bison.y"
                        { free ((yyvsp[-5].str)); }
-#line 2430 "bsdl_bison.tab.c"
+#line 2704 "bsdl_bison.c"
     break;
 
   case 260: /* Procedure: error  */
@@ -2436,31 +2710,31 @@ yyreduce:
                          BUMP_ERROR;
                          YYABORT;
                        }
-#line 2440 "bsdl_bison.tab.c"
+#line 2714 "bsdl_bison.c"
     break;
 
   case 266: /* Action: IDENTIFIER EQUAL LPAREN Action_Specification_List RPAREN  */
 #line 840 "bsdl_bison.y"
                             { free ((yyvsp[-4].str)); }
-#line 2446 "bsdl_bison.tab.c"
+#line 2720 "bsdl_bison.c"
     break;
 
   case 267: /* Action: IDENTIFIER Data_Name EQUAL LPAREN Action_Specification_List RPAREN  */
 #line 842 "bsdl_bison.y"
                             { free ((yyvsp[-5].str)); }
-#line 2452 "bsdl_bison.tab.c"
+#line 2726 "bsdl_bison.c"
     break;
 
   case 268: /* Action: IDENTIFIER PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN  */
 #line 844 "bsdl_bison.y"
                             { free ((yyvsp[-5].str)); }
-#line 2458 "bsdl_bison.tab.c"
+#line 2732 "bsdl_bison.c"
     break;
 
   case 269: /* Action: IDENTIFIER Data_Name PROPRIETARY EQUAL LPAREN Action_Specification_List RPAREN  */
 #line 846 "bsdl_bison.y"
                             { free ((yyvsp[-6].str)); }
-#line 2464 "bsdl_bison.tab.c"
+#line 2738 "bsdl_bison.c"
     break;
 
   case 270: /* Action: error  */
@@ -2470,71 +2744,71 @@ yyreduce:
                               BUMP_ERROR;
                               YYABORT;
                             }
-#line 2474 "bsdl_bison.tab.c"
+#line 2748 "bsdl_bison.c"
     break;
 
   case 273: /* Action_Specification: IDENTIFIER  */
 #line 858 "bsdl_bison.y"
                             { free ((yyvsp[0].str)); }
-#line 2480 "bsdl_bison.tab.c"
+#line 2754 "bsdl_bison.c"
     break;
 
   case 274: /* Action_Specification: IDENTIFIER Data_Name  */
 #line 860 "bsdl_bison.y"
                             { free ((yyvsp[-1].str)); }
-#line 2486 "bsdl_bison.tab.c"
+#line 2760 "bsdl_bison.c"
     break;
 
   case 275: /* Action_Specification: IDENTIFIER Data_Name PROPRIETARY  */
 #line 862 "bsdl_bison.y"
                             { free ((yyvsp[-2].str)); }
-#line 2492 "bsdl_bison.tab.c"
+#line 2766 "bsdl_bison.c"
     break;
 
   case 276: /* Action_Specification: IDENTIFIER Data_Name Option_Specification  */
 #line 864 "bsdl_bison.y"
                             { free ((yyvsp[-2].str)); }
-#line 2498 "bsdl_bison.tab.c"
+#line 2772 "bsdl_bison.c"
     break;
 
   case 277: /* Action_Specification: IDENTIFIER Data_Name PROPRIETARY Option_Specification  */
 #line 866 "bsdl_bison.y"
                             { free ((yyvsp[-3].str)); }
-#line 2504 "bsdl_bison.tab.c"
+#line 2778 "bsdl_bison.c"
     break;
 
   case 278: /* Action_Specification: IDENTIFIER PROPRIETARY  */
 #line 868 "bsdl_bison.y"
                             { free ((yyvsp[-1].str)); }
-#line 2510 "bsdl_bison.tab.c"
+#line 2784 "bsdl_bison.c"
     break;
 
   case 279: /* Action_Specification: IDENTIFIER PROPRIETARY Option_Specification  */
 #line 870 "bsdl_bison.y"
                             { free ((yyvsp[-2].str)); }
-#line 2516 "bsdl_bison.tab.c"
+#line 2790 "bsdl_bison.c"
     break;
 
   case 280: /* Action_Specification: IDENTIFIER Option_Specification  */
 #line 872 "bsdl_bison.y"
                             { free ((yyvsp[-1].str)); }
-#line 2522 "bsdl_bison.tab.c"
+#line 2796 "bsdl_bison.c"
     break;
 
   case 284: /* Exit_Instruction_List: IDENTIFIER  */
 #line 880 "bsdl_bison.y"
                         { free ((yyvsp[0].str)); }
-#line 2528 "bsdl_bison.tab.c"
+#line 2802 "bsdl_bison.c"
     break;
 
   case 285: /* Exit_Instruction_List: Exit_Instruction_List COMMA IDENTIFIER  */
 #line 882 "bsdl_bison.y"
                         { free ((yyvsp[0].str)); }
-#line 2534 "bsdl_bison.tab.c"
+#line 2808 "bsdl_bison.c"
     break;
 
 
-#line 2538 "bsdl_bison.tab.c"
+#line 2812 "bsdl_bison.c"
 
       default: break;
     }
@@ -2576,7 +2850,7 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == URJ_BSDL_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -2589,17 +2863,17 @@ yyerrlab:
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= URJ_BSDL_EOF)
+      if (yychar <= YYEOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == URJ_BSDL_EOF)
+          if (yychar == YYEOF)
             YYABORT;
         }
       else
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, priv_data);
-          yychar = URJ_BSDL_EMPTY;
+          yychar = YYEMPTY;
         }
     }
 
@@ -2701,7 +2975,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != URJ_BSDL_EMPTY)
+  if (yychar != YYEMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */

@@ -35,33 +35,25 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_URJ_BSDL_BSDL_C_INCLUDED
-# define YY_URJ_BSDL_BSDL_C_INCLUDED
+#ifndef YY_URJ_BSDL_BSDL_BISON_H_INCLUDED
+# define YY_URJ_BSDL_BSDL_BISON_H_INCLUDED
 /* Debug traces.  */
-#ifndef URJ_BSDL_DEBUG
-# if defined YYDEBUG
+#ifndef YYDEBUG
+# define YYDEBUG 0
+#endif
 #if YYDEBUG
-#   define URJ_BSDL_DEBUG 1
-#  else
-#   define URJ_BSDL_DEBUG 0
-#  endif
-# else /* ! defined YYDEBUG */
-#  define URJ_BSDL_DEBUG 0
-# endif /* ! defined YYDEBUG */
-#endif  /* ! defined URJ_BSDL_DEBUG */
-#if URJ_BSDL_DEBUG
 extern int urj_bsdl_debug;
 #endif
 
 /* Token kinds.  */
-#ifndef URJ_BSDL_TOKENTYPE
-# define URJ_BSDL_TOKENTYPE
-  enum urj_bsdl_tokentype
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+  enum yytokentype
   {
-    URJ_BSDL_EMPTY = -2,
-    URJ_BSDL_EOF = 0,              /* "end of file"  */
-    URJ_BSDL_error = 256,          /* error  */
-    URJ_BSDL_UNDEF = 257,          /* "invalid token"  */
+    YYEMPTY = -2,
+    YYEOF = 0,                     /* "end of file"  */
+    YYerror = 256,                 /* error  */
+    YYUNDEF = 257,                 /* "invalid token"  */
     CONSTANT = 258,                /* CONSTANT  */
     PIN_MAP = 259,                 /* PIN_MAP  */
     PHYSICAL_PIN_MAP = 260,        /* PHYSICAL_PIN_MAP  */
@@ -174,24 +166,140 @@ extern int urj_bsdl_debug;
     ISC_ILLEGAL_EXIT = 367,        /* ISC_ILLEGAL_EXIT  */
     ILLEGAL = 368                  /* ILLEGAL  */
   };
-  typedef enum urj_bsdl_tokentype urj_bsdl_token_kind_t;
+  typedef enum yytokentype yytoken_kind_t;
 #endif
+/* Token kinds.  */
+#define YYEMPTY -2
+#define YYEOF 0
+#define YYerror 256
+#define YYUNDEF 257
+#define CONSTANT 258
+#define PIN_MAP 259
+#define PHYSICAL_PIN_MAP 260
+#define PIN_MAP_STRING 261
+#define TAP_SCAN_IN 262
+#define TAP_SCAN_OUT 263
+#define TAP_SCAN_MODE 264
+#define TAP_SCAN_RESET 265
+#define TAP_SCAN_CLOCK 266
+#define INSTRUCTION_LENGTH 267
+#define INSTRUCTION_OPCODE 268
+#define INSTRUCTION_CAPTURE 269
+#define INSTRUCTION_DISABLE 270
+#define INSTRUCTION_GUARD 271
+#define INSTRUCTION_PRIVATE 272
+#define REGISTER_ACCESS 273
+#define BOUNDARY_LENGTH 274
+#define BOUNDARY_REGISTER 275
+#define IDCODE_REGISTER 276
+#define USERCODE_REGISTER 277
+#define BOUNDARY 278
+#define DEVICE_ID 279
+#define INPUT 280
+#define OUTPUT2 281
+#define OUTPUT3 282
+#define CONTROL 283
+#define CONTROLR 284
+#define INTERNAL 285
+#define CLOCK 286
+#define BIDIR 287
+#define BIDIR_IN 288
+#define BIDIR_OUT 289
+#define Z 290
+#define WEAK0 291
+#define WEAK1 292
+#define IDENTIFIER 293
+#define PULL0 294
+#define PULL1 295
+#define KEEPER 296
+#define DECIMAL_NUMBER 297
+#define BINARY_PATTERN 298
+#define BIN_X_PATTERN 299
+#define COMMA 300
+#define LPAREN 301
+#define RPAREN 302
+#define LBRACKET 303
+#define RBRACKET 304
+#define COLON 305
+#define ASTERISK 306
+#define COMPLIANCE_PATTERNS 307
+#define OBSERVE_ONLY 308
+#define BYPASS 309
+#define CLAMP 310
+#define EXTEST 311
+#define HIGHZ 312
+#define IDCODE 313
+#define INTEST 314
+#define PRELOAD 315
+#define RUNBIST 316
+#define SAMPLE 317
+#define USERCODE 318
+#define COMPONENT_CONFORMANCE 319
+#define STD_1149_1_1990 320
+#define STD_1149_1_1993 321
+#define STD_1149_1_2001 322
+#define ISC_CONFORMANCE 323
+#define STD_1532_2001 324
+#define STD_1532_2002 325
+#define ISC_PIN_BEHAVIOR 326
+#define ISC_FIXED_SYSTEM_PINS 327
+#define ISC_STATUS 328
+#define IMPLEMENTED 329
+#define ISC_BLANK_USERCODE 330
+#define ISC_SECURITY 331
+#define ISC_DISABLE_READ 332
+#define ISC_DISABLE_PROGRAM 333
+#define ISC_DISABLE_ERASE 334
+#define ISC_DISABLE_KEY 335
+#define ISC_FLOW 336
+#define UNPROCESSED 337
+#define EXIT_ON_ERROR 338
+#define ARRAY 339
+#define SECURITY 340
+#define INITIALIZE 341
+#define REPEAT 342
+#define TERMINATE 343
+#define LOOP 344
+#define MIN 345
+#define MAX 346
+#define DOLLAR 347
+#define EQUAL 348
+#define HEX_STRING 349
+#define WAIT 350
+#define REAL_NUMBER 351
+#define PLUS 352
+#define MINUS 353
+#define SH_RIGHT 354
+#define SH_LEFT 355
+#define TILDE 356
+#define QUESTION_MARK 357
+#define EXCLAMATION_MARK 358
+#define QUESTION_EXCLAMATION 359
+#define CRC 360
+#define OST 361
+#define ISC_PROCEDURE 362
+#define ISC_ACTION 363
+#define PROPRIETARY 364
+#define OPTIONAL 365
+#define RECOMMENDED 366
+#define ISC_ILLEGAL_EXIT 367
+#define ILLEGAL 368
 
 /* Value type.  */
-#if ! defined URJ_BSDL_STYPE && ! defined URJ_BSDL_STYPE_IS_DECLARED
-union URJ_BSDL_STYPE
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+union YYSTYPE
 {
 #line 188 "bsdl_bison.y"
 
   int   integer;
   char *str;
 
-#line 190 "bsdl.c"
+#line 298 "bsdl_bison.h"
 
 };
-typedef union URJ_BSDL_STYPE URJ_BSDL_STYPE;
-# define URJ_BSDL_STYPE_IS_TRIVIAL 1
-# define URJ_BSDL_STYPE_IS_DECLARED 1
+typedef union YYSTYPE YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
 #endif
 
 
@@ -200,4 +308,4 @@ typedef union URJ_BSDL_STYPE URJ_BSDL_STYPE;
 int urj_bsdl_parse (urj_bsdl_parser_priv_t *priv_data);
 
 
-#endif /* !YY_URJ_BSDL_BSDL_C_INCLUDED  */
+#endif /* !YY_URJ_BSDL_BSDL_BISON_H_INCLUDED  */

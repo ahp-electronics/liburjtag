@@ -90,66 +90,23 @@ execute_process (COMMAND /bin/bash ${CMAKE_CURRENT_SOURCE_DIR}/generate_cmd_list
 
 FIND_PACKAGE(BISON REQUIRED)
 IF(BISON_FOUND)
-SET(BISON_BSDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${BISON_BSDL_OUTPUT}
-    COMMAND ${BISON_EXECUTABLE}
-    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.h
-    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_sem.c
-    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c
-    --output=${BISON_BSDL_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_bison.y
-    COMMENT "Generating bsdl_parser.c"
-)
-SET(BISON_VHDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_parser.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${BISON_VHDL_OUTPUT}
-    COMMAND ${BISON_EXECUTABLE}
-    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.h
-    --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c
-    --output=${BISON_VHDL_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_bison.y
-    COMMENT "Generating vhdl_parser.c"
-)
-SET(BISON_SVF_OUTPUT ${CMAKE_SOURCE_DIR}/src/svf/svf_parser.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${BISON_SVF_OUTPUT}
-    COMMAND ${BISON_EXECUTABLE}
-    --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.h
-    --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.c
-    --output=${BISON_SVF_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/svf/svf_bison.y
-    COMMENT "Generating svf_parser.c"
-)
+SET(BISON_BSDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_bison.tab.c)
+SET(BISON_VHDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_bison.tab.c)
+SET(BISON_SVF_OUTPUT ${CMAKE_SOURCE_DIR}/src/svf/svf_bison.tab.c)
+execute_process(COMMAND ${BISON_EXECUTABLE} --update --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_parser.h --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_sem.c --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c --header=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_bison.tab.h ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_bison.y )
+execute_process(COMMAND ${BISON_EXECUTABLE} --update --defines=${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_parser.h --defines=${CMAKE_SOURCE_DIR}/src/bsdl/bsdl.c --header=${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_bison.tab.h ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_bison.y )
+execute_process(COMMAND ${BISON_EXECUTABLE} --update --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.h --defines=${CMAKE_SOURCE_DIR}/src/svf/svf.c --header=${CMAKE_SOURCE_DIR}/src/svf/svf_bison.tab.h ${CMAKE_SOURCE_DIR}/src/svf/svf_bison.y )
 ENDIF()
 
 
 FIND_PACKAGE(FLEX REQUIRED)
 IF(FLEX_FOUND)
 SET(FLEX_BSDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_scanner.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${FLEX_BSDL_OUTPUT}
-    COMMAND ${FLEX_EXECUTABLE}
-    --outfile=${FLEX_BSDL_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_flex.l
-    COMMENT "Generating bsdl_scanner.c"
-)
 SET(FLEX_VHDL_OUTPUT ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_scanner.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${FLEX_VHDL_OUTPUT}
-    COMMAND ${FLEX_EXECUTABLE}
-    --outfile=${FLEX_VHDL_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_flex.l
-    COMMENT "Generating vhdl_scanner.c"
-)
 SET(FLEX_SVF_OUTPUT ${CMAKE_SOURCE_DIR}/src/svf/svf_scanner.c)
-ADD_CUSTOM_COMMAND(
-    OUTPUT ${FLEX_SVF_OUTPUT}
-    COMMAND ${FLEX_EXECUTABLE}
-    --outfile=${FLEX_SVF_OUTPUT}
-    ${CMAKE_SOURCE_DIR}/src/svf/svf_flex.l
-    COMMENT "Generating svf_scanner.c"
-)
+execute_process(COMMAND ${FLEX_EXECUTABLE} -o ${FLEX_BSDL_OUTPUT} ${CMAKE_SOURCE_DIR}/src/bsdl/bsdl_flex.l )
+execute_process(COMMAND ${FLEX_EXECUTABLE} -o ${FLEX_VHDL_OUTPUT} ${CMAKE_SOURCE_DIR}/src/bsdl/vhdl_flex.l )
+execute_process(COMMAND ${FLEX_EXECUTABLE} -o ${FLEX_SVF_OUTPUT} ${CMAKE_SOURCE_DIR}/src/svf/svf_flex.l )
 ENDIF()
 
 set(SOURCES

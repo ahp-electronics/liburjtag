@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_URJ_SVF_HOME_PLATO_DEV_GITHUB_AHP_ELECTRONICS_LIBURJTAG_SRC_SVF_SVF_C_INCLUDED
-# define YY_URJ_SVF_HOME_PLATO_DEV_GITHUB_AHP_ELECTRONICS_LIBURJTAG_SRC_SVF_SVF_C_INCLUDED
+#ifndef YY_URJ_SVF_SVF_BISON_H_INCLUDED
+# define YY_URJ_SVF_SVF_BISON_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -114,12 +114,74 @@ extern int urj_svf_debug;
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
+/* Token kinds.  */
+#define YYEMPTY -2
+#define SVF_EOF 0
+#define YYerror 256
+#define YYUNDEF 257
+#define IDENTIFIER 258
+#define NUMBER 259
+#define HEXA_NUM_FRAGMENT 260
+#define VECTOR_STRING 261
+#define EMPTY 262
+#define ENDDR 263
+#define ENDIR 264
+#define FREQUENCY 265
+#define HZ 266
+#define STATE 267
+#define RESET 268
+#define IDLE 269
+#define TDI 270
+#define TDO 271
+#define MASK 272
+#define SMASK 273
+#define TRST 274
+#define ON 275
+#define OFF 276
+#define Z 277
+#define ABSENT 278
+#define HDR 279
+#define HIR 280
+#define SDR 281
+#define SIR 282
+#define TDR 283
+#define TIR 284
+#define PIO 285
+#define PIOMAP 286
+#define IN 287
+#define OUT 288
+#define INOUT 289
+#define H 290
+#define L 291
+#define U 292
+#define D 293
+#define X 294
+#define RUNTEST 295
+#define MAXIMUM 296
+#define SEC 297
+#define TCK 298
+#define SCK 299
+#define ENDSTATE 300
+#define IRPAUSE 301
+#define IRSHIFT 302
+#define IRUPDATE 303
+#define IRSELECT 304
+#define IREXIT1 305
+#define IREXIT2 306
+#define IRCAPTURE 307
+#define DRPAUSE 308
+#define DRSHIFT 309
+#define DRUPDATE 310
+#define DRSELECT 311
+#define DREXIT1 312
+#define DREXIT2 313
+#define DRCAPTURE 314
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 60 "/home/plato/dev/github/ahp-electronics/liburjtag/src/svf/svf_bison.y"
+#line 60 "svf_bison.y"
 
   int    token;
   double dvalue;
@@ -129,7 +191,7 @@ union YYSTYPE
   struct tdval tdval;
   struct tcval *tcval;
 
-#line 133 "/home/plato/dev/github/ahp-electronics/liburjtag/src/svf/svf.c"
+#line 195 "svf_bison.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -157,4 +219,4 @@ struct YYLTYPE
 int urj_svf_parse (urj_svf_parser_priv_t *priv_data, urj_chain_t *chain);
 
 
-#endif /* !YY_URJ_SVF_HOME_PLATO_DEV_GITHUB_AHP_ELECTRONICS_LIBURJTAG_SRC_SVF_SVF_C_INCLUDED  */
+#endif /* !YY_URJ_SVF_SVF_BISON_H_INCLUDED  */
